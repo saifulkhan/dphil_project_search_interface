@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title> Arrow Marker Test </title>
+  <script src="http://d3js.org/d3.v3.js"></script>
+</head>
+
+<body>
+
+<p id="chart">
+
+  <script>
+
+
+
+    var svg = d3.select("#chart")
+      .append("svg")
+      .attr("x", 10)
+      .attr("y", 10)
+      .attr("width", 500)
+      .attr("height", 500)
+      .style("background", "gray")
+      .attr("transform", "translate(" + 250 + "," + 250 + ")");
+
+
+    var legend = [0, 0.5 * Math.PI, 1.5 * Math.PI, 2 * Math.PI];
+
+    var legendGroup = svg.selectAll(".legend")
+      .data(legend)
+      .enter()
+      .append("g");
+
+
+    legendGroup.append("svg:defs").selectAll("marker1")
+      .data(["edgearrow"])      // Different link/path types can be defined here
+      .enter().append("svg:marker")    // This section adds in the arrows
+      .attr("id", String)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 11)           // adjust the position
+      .attr("refY", -0.0)
+      .attr("fill", "rgb(6,120,155)")
+      .attr("markerWidth", 8)
+      .attr("markerHeight", 10)
+      .attr("orient", "auto")
+      .append("svg:path")
+      .attr("d", "M0,-5L10,0L0,5");
+
+
+    var arcs = d3.svg.arc()
+      .innerRadius(10)
+      .outerRadius(11)
+      .startAngle(function (d, i) {
+        console.log(d);
+        return d;
+      })
+      .endAngle(function (d, i) {
+        return d + 0.45 * Math.PI;
+      });
+
+    //var arcs = [0, 0.5*Math.PI, 0.75*Math.PI, Math.PI];
+   // Draw the arcs
+    legendGroup.append("path")
+      .attr("d", arcs)
+      .attr("class", "ticks")
+      .attr("id", function (d, i) {
+        return "id" + i;
+      });
+
+    // Add the arrow
+    svg.attr("marker-start", "url(#arrowhead)");
+
+
+
+  </script>
+
+</body>
+</html>

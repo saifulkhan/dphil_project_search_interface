@@ -1,0 +1,21 @@
+/*
+ * The Query: List View dialogbox
+ */
+
+.ui-dialog-titlebar {
+  height: 25px;
+  background : #3276b1;
+  border: hidden;
+}
+
+.ui-dialog-title {
+  float: left;
+  font-size: 100%;
+  /*color: white;*/
+  font-style: normal;
+}
+
+.late-discovery .ui-widget-header {
+  background:gray;
+  color:white;
+}

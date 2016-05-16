@@ -1,0 +1,18 @@
+'use strict'
+
+var mongoose = require('mongoose');
+Schema = mongoose.Schema;
+
+var databases = require('../../databases');
+
+var SearchSchema = new Schema(
+    {
+      name: String,
+      type: String,
+      size1: String,
+      size2: String,
+      date1: String,
+      date2: String,
+      group: String
+    }
+);

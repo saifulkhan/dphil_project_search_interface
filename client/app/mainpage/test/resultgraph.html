@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>RFG (Result Flow Graph)</title>
+		<script type="text/javascript" src="../assets/lib/d3.v3.js"> </script>
+
+    <script type="text/javascript" src="../assets/lib/d3vis/resultgraph.js"> </script>
+    <script type="text/javascript" src="../assets/lib/d3vis/common.js"> </script>
+
+    <link rel="stylesheet" type="text/css" href="../assets/lib/font-awesome-4.2.0/css/font-awesome.min.css"/> </link>
+		<link rel="stylesheet" type="text/css" href="../assets/lib/d3vis/resultgraph.css" > </link>
+
+
+	</head>
+	<body>
+		<p id="resultgraph">
+		<script type="text/javascript">
+
+
+
+      var result1 = [{"docid": 1, "select": true}, {"docid": 2, "select": true}, {"docid": 3, "select": false},
+        {"docid": 4, "select": false}, {"docid": 5, "select": false}, {"docid": 6, "select": true},
+        {"docid": 7, "select": false}, {"docid": 8, "select": true}, {"docid": 9, "select": false},
+        {"docid": 10, "select": false}, {"docid": 11, "select": true}, {"docid": 12, "select": true},
+        {"docid": 13, "select": true}, {"docid": 14, "select": false}, {"docid": 15, "select": false},
+        {"docid": 16, "select": false}, {"docid": 17, "select": false}, {"docid": 18, "select": false},
+        {"docid": 19, "select": false}, {"docid": 20, "select": false}, {"docid": 21, "select": false},
+        {"docid": 22, "select": false}, {"docid": 23, "select": false}, {"docid": 24, "select": true},
+        {"docid": 25, "select": false}];
+
+      var result2 = [{"docid": 14, "select": true}, {"docid": 15, "select": true}, {"docid": 3, "select": true},
+        {"docid": 1, "select": false}, {"docid": 2, "select": false}, {"docid": 44, "select": true},
+        {"docid": 17, "select": false}, {"docid": 18, "select": true}, {"docid": 19, "select": false},
+        {"docid": 20, "select": false}, {"docid": 21, "select": true}, {"docid": 22, "select": true},
+        {"docid": 33, "select": true}, {"docid": 34, "select": false}, {"docid": 35, "select": false},
+        {"docid": 36, "select": false}, {"docid": 37, "select": false}, {"docid": 38, "select": false},
+        {"docid": 39, "select": false}, {"docid": 40, "select": false}, {"docid": 41, "select": false},
+        {"docid": 42, "select": false}, {"docid": 43, "select": false}];
+
+      var result3 = [{"docid": 60, "select": true}, {"docid": 18, "select": true}, {"docid": 19, "select": true},
+        {"docid": 4, "select": false}, {"docid": 5, "select": false}, {"docid": 6, "select": true},
+        {"docid": 33, "select": false}, {"docid": 34, "select": true}, {"docid": 35, "select": false},
+        {"docid": 42, "select": false}, {"docid": 43, "select": true}, {"docid": 51, "select": true},
+        {"docid": 52, "select": true}, {"docid": 53, "select": false}, {"docid": 54, "select": false},
+        {"docid": 55, "select": false}, {"docid": 56, "select": false}, {"docid": 57, "select": false},
+        {"docid": 58, "select": false}, {"docid": 59, "select": false}, {"docid": 17, "select": false}];
+
+
+      var  coordinates = {
+        x: 0,
+        y: 0,
+        w: window.innerWidth,
+        h: window.innerHeight
+      };
+
+      updateResultGraph(JSON.stringify(result1), "#resultgraph", coordinates);
+      updateResultGraph(JSON.stringify(result2), "#resultgraph", coordinates);
+      updateResultGraph(JSON.stringify(result3), "#resultgraph", coordinates);
+
+
+
+    </script>
+	</body>
+</html>

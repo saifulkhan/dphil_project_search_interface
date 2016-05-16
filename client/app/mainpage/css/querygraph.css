@@ -1,0 +1,19 @@
+div.bar {
+  display: inline-block;
+  width: 20px;
+  height: 75px;
+  margin-right: 2px;
+  background-color: teal;
+}
+
+.wedge {
+  stroke: white;
+  stroke-width: 1px;
+}
+
+.sizeIcon {
+  stroke: black;
+  stroke-width: 1px;
+  fill: black;
+  fill-opacity: 0.3;
+}

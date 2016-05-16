@@ -1,0 +1,11 @@
+'use strict';
+
+var express = require('express');
+var router = express.Router();
+var controller = require('./common.controller');
+
+router.get('/treemapdata', controller.getTreemapdata);
+router.get('/search', controller.search);
+router.get('/fetch_search', controller.fetchSearchData);
+
+module.exports = router;

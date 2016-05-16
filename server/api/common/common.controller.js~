@@ -1,0 +1,39 @@
+'use strict';
+
+var fs = require('fs');
+var Search = require('./search.module');
+
+exports.fetchTreemapdata = function(req, res) {
+	console.log('--getTreemapdata--');
+
+	// read treemap data
+	var treemap_data = fs.readFileSync('treemap_data/data.json', 'utf8');
+	//console.log(treemap_data);
+    
+    res.end(treemap_data);
+}
+
+exports.search = function(req, res) {
+  console.log('--search--');
+  sonsole.log('Data:' + req.body);
+  Search.create(req.body, function(error, data){
+    if(error) {
+      console.log("Error: could not insert data into search collection");
+      res.json(400, "Error: could not insert data into search collection"); 
+    }
+  });
+
+  res.json("done');
+}
+
+exports.fetchSearchData = function(req, res) {
+  console.log("--fetchSearchData--");
+  Search.find(function(error, data){
+    if(error) {
+      var msg = "Error: could not fetch search data";
+      console.log(msg);
+      res.json(400, msg);
+    }
+  });
+
+}

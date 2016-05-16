@@ -1,0 +1,40 @@
+
+.glyph {
+  fill: none;
+  width: 400px;
+  height: 400px;
+}
+
+.ring {
+  fill: yellow;
+}
+
+.pie {
+  fill: yellow;
+}
+
+.arc {
+  fill: Aqua;
+}
+
+.innerRing {
+  fill: LightGray;
+
+}
+
+.dot {
+  fill: Aqua;
+  radius: 5px;
+}
+
+.spiral {
+  fill: none;
+  stroke: red;
+  stroke-width: 2px;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

@@ -1,0 +1,137 @@
+
+div.scrollbox {
+  overflow: auto;       /* This is changed by enscroll, but must be defined */
+  /* width: 1300px;*/   /* The arbitrary width and height of the view pane */
+    height: 250px;
+  overflow: hidden;
+}
+
+div.scrollbox:hover {
+  overflow: auto;
+  padding-right: 1px;
+}
+
+.toolbox {
+  overflow: auto;       /* This is changed by enscroll, but must be defined */
+  /* width: 1300px;*/   /* The arbitrary width and height of the view pane */
+  height: 25px;
+  text-align: right;
+  background: #F7BE81;
+}
+
+/*
+ * Table heading
+ */
+
+th {
+  color: #FFFFFF;
+  background-color: #327CCB;
+  border-color: #357ebd;
+}
+
+/*
+ * File selection glyph from the table
+ */
+
+.selection_glyph {
+  color: #FF8000;
+  font-size: 15px;
+
+}
+
+/*
+ * Horizontal style
+ */
+
+hr.style-two {
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+hr.style-four {
+  height: 12px;
+  border: 0;
+  box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+}
+
+select.sone {
+  background: #A9F5E1;
+}
+
+/*height: 250px;*/
+div#tableview {
+
+  /*border: 1px solid black;*/
+}
+
+div.mousescroll {
+  overflow: hidden;
+  width : 50px;
+  height : 50px;
+}
+
+div.mousescroll:hover {
+  overflow-y: scroll;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.slimScrollDiv {
+  border: 0.5px solid #ccc;
+  margin: 3px;
+  height:200px;
+
+}
+
+/*
+ * Size spinbox
+ */
+select.sone {
+  background: #FFFFFF;
+  /*height: 30px;*/
+
+}
+
+/*
+ * Search button
+ * Other buttons also using this - create separate css- TODO.
+ */
+.btn-primary {
+  color: #fff;
+  background-color: #327CCB;
+  border-color: #4cae4c;
+}
+
+/*
+ * table color thing
+ */
+.odd {
+  background-color: #DCE2ED;
+}
+
+.even {
+  background-color: #FFFFFF;
+}
+
+
+/* one row is divided among radial graph and glyph view*/
+.first-column {
+  /*width: 40%;*/
+  float: left;
+}
+
+.second-column {
+  /*width: 40%;*/
+  float: right;
+}
+
+/* The font size of the table is increased*/
+.table-condensed{
+ font-size: 12px;
+}

@@ -1,0 +1,489 @@
+
+var queryGraph = {
+  // Arg
+  svgCoordinate: {},
+  selector: "",
+
+  glyphSize: 50,
+  distanceX: 60,
+  nodeCoordinate: new Array(), // [{"x":, "y"}, ..]
+  queryArray: [],
+  svgCanvas: null,
+  fieldFlags: {},  // attribute: [key, type, size, date]; value: [unset = 0 , set = 1, changed = 2]
+
+  /*
+   * Update the current node co-ordinate
+   */
+  pushNodeCoordinate: function (arg) {
+    this.nodeCoordinate.push(arg);
+  },
+
+  getLastNodeCoordinate: function () {
+    if (this.nodeCoordinate.length) {
+      return this.nodeCoordinate[this.nodeCoordinate.length - 1];
+    } else {
+      return {};
+    }
+  },
+
+  getCanvas: function () {
+    // Glyphs will be drawn in the same canvas
+    if (this.svgCanvas == null) {
+      this.svgCanvas = d3.select(this.selector)
+        .append("svg")
+        .attr("x", this.svgCoordinate.x)
+        .attr("y", this.svgCoordinate.y)
+        .attr("width", this.svgCoordinate.w)
+        .attr("height", this.svgCoordinate.h);
+    }
+    return this.svgCanvas;
+  },
+
+  // queryArray array of the queries (a query is a object)
+  pushLastQuery: function (query) {
+    this.queryArray.push(query);
+  },
+
+  getLastQuery: function () {
+    if (this.queryArray.length > 0) {
+      return this.queryArray[this.queryArray.length - 1];
+    } else {
+      return "";
+    }
+  }
+};
+
+/********************************************************************************************************
+ * Each time a new query comes this update() will be calleed
+ * This will draw the glyph.
+ *  Value: unset = 0 , set = 1, (set +) changed = 2
+ ********************************************************************************************************/
+
+function processQuery(query, selector, svgCoordinate, reformulatedQuery) {
+
+
+  console.log("updateQueryGraph", query, selector, svgCoordinate);
+
+  queryGraph.selector = selector;
+  queryGraph.svgCoordinate = svgCoordinate;
+
+  var fieldFlags = {key: 0, type: 0, size: 0, date: 0};
+
+  var queryLast = queryGraph.getLastQuery();
+  console.log("last:", queryLast);
+  //console.log("last:", queryLast["key"], queryLast["type"], queryLast["size"], queryLast["date"]);
+
+  console.log("current :", query);
+  //console.log("current:", query["key"], query["type"], query["size"], query["date"]);
+
+
+  /*
+   * Compare with last query - and process the query fiellds
+   */
+  if (query["key"].length == 0) {
+    fieldFlags["key"] = 0;
+  } else if (queryLast) {                          // At the very first time it is null, so queryLast["key"] will give can't read property error
+    if (query["key"].toLowerCase() == queryLast["key"].toLowerCase()) {
+      fieldFlags["key"] = 1;
+    } else {
+      fieldFlags["key"] = 2;
+    }
+  } else {
+    fieldFlags["key"] = 2;
+  }
+
+// type
+  if (query["type"].length == 0) {
+    fieldFlags["type"] = 0;
+  } else if (queryLast && queryLast["type"]) {
+    if (query["type"].toLowerCase() == queryLast["type"].toLowerCase()) {
+      fieldFlags["type"] = 1;
+    } else {
+      fieldFlags["type"] = 2;
+    }
+  } else {
+    fieldFlags["type"] = 2;
+  }
+
+// size
+  var size = query["sizefrom"] + query["sizeto"];
+  var lastSize;
+  if (queryLast) {
+    lastSize = queryLast["sizefrom"] + queryLast["sizeto"];
+  } else {
+    lastSize = "";
+  }
+
+  if (size == "") {
+    fieldFlags["size"] = 0;
+  } else if (size == lastSize) {
+    fieldFlags["size"] = 1;
+  } else {
+    fieldFlags["size"] = 2;
+  }
+
+
+  // date
+  var date = query["datefrom"] + query["dateto"];
+  var lastDate;
+  if (queryLast) {
+    lastDate = queryLast["datefrom"] + queryLast["dateto"];
+  } else {
+    lastDate = "";
+  }
+
+  if (date == "") {
+    fieldFlags["date"] = 0;
+  } else if (date == lastDate) {
+    fieldFlags["date"] = 1;
+  } else {
+    fieldFlags["date"] = 2;
+  }
+
+  queryGraph.fieldFlags = fieldFlags;
+  queryGraph.pushLastQuery(query);
+
+  drawQueryGraph();
+}
+
+
+/********************************************************************************************************
+ * Drawing
+ ********************************************************************************************************/
+
+function drawQueryGraph() {
+
+  console.log("updateQueryGraph");
+
+  var coordinate = {};
+  var lastCoordinate = queryGraph.getLastNodeCoordinate();
+  if (Object.getOwnPropertyNames(lastCoordinate).length === 0) {
+    coordinate["x"] = (queryGraph.glyphSize + queryGraph.distanceX) * 0.5;
+    coordinate["y"] = queryGraph.glyphSize;
+  } else {
+    coordinate["x"] = lastCoordinate["x"] + queryGraph.glyphSize + queryGraph.distanceX;
+    coordinate["y"] = lastCoordinate["y"];
+  }
+  queryGraph.pushNodeCoordinate(coordinate);
+
+  console.log("updateQueryGraph- lastCoordinate: ", lastCoordinate, ", coordinate: ", coordinate);
+
+  var svgCanvas = queryGraph.getCanvas();
+  var svg = svgCanvas.append("g")
+    .attr("transform", "translate(" + coordinate["x"] + ", " + coordinate["y"] + ")");
+
+  // draw the axis
+  drawTemporalAxis(svgCanvas, coordinate, true);
+
+  var radius = queryGraph.glyphSize * 0.5;
+  var query = queryGraph.getLastQuery();
+  var fieldFlags = queryGraph.fieldFlags;
+  console.log("query", query, "; flags", fieldFlags);
+
+  var key_pie = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(radius)
+    .startAngle(0)
+    .endAngle(0.5 * Math.PI);
+
+  svg.append("path")
+    .attr("d", key_pie)
+    .attr("class", "wedge")
+    .style("fill", wedgeColor("key", fieldFlags.key))
+    .append("title")
+    .text(function(d) { return query.key; });
+
+  var type_pie = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(radius)
+    .startAngle(0.5 * Math.PI)
+    .endAngle(1.0 * Math.PI);
+
+  svg.append("path")
+    .attr("d", type_pie)
+    .attr("class", "wedge")
+    .style("fill", wedgeColor("type", fieldFlags.type))
+    .append("title")
+    .text(function(d) { return query.type; });
+
+  var size_pie = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(radius)
+    .startAngle(1.0 * Math.PI)
+    .endAngle(1.5 * Math.PI);
+
+  svg.append("path")
+    .attr("d", size_pie)
+    .attr("class", "wedge")
+    .style("fill", wedgeColor("size", fieldFlags.size))
+    .append("title")
+    .text(function(d) { return query.sizefrom + " to " + query.sizeto; });
+
+  var date_pie = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(radius)
+    .startAngle(1.5 * Math.PI)
+    .endAngle(2.0 * Math.PI);
+
+  svg.append("path")
+    .attr("d", date_pie)
+    .attr("class", "wedge")
+    .style("fill", wedgeColor("date", fieldFlags.date))
+    .append("title")
+    .text(function(d) { return query.datefrom + " to " + query.dateto; });
+
+
+  function wedgeColor(field, value) {
+
+    if (value == 0) {
+      return "#F0F0F0"; // Grey
+    }
+
+    if (field == "key") {
+      return "rgb(163, 216, 84)"; // Kiwi (R-66 | G-137 | B-87)  #428957
+
+    } else if (field == "type") {
+      return "rgb(172, 212, 228)"; // Turquoise 	#48D1CC (r, g, b)	(72, 209, 204)
+
+    } else if (field == "size") {
+      return "rgb(218, 142, 142)"; // Scarlet #E25822 (r, g, b)	(226, 88, 34)
+
+    } else if (field == "date") {
+      return "rgb(230, 208, 0)"; // Daisy (R-247 | G-214 | B-0) #F7D600
+
+    } else {
+      return "#F0F0F0"; // Grey for unknown
+    }
+  }
+
+
+  /********************************************************************************************************
+   * Icons
+   ********************************************************************************************************/
+  if (fieldFlags.key == 2) {
+    keyIcon();
+  }
+  if (fieldFlags.type == 2) {
+    typeIcon();
+  }
+  if (fieldFlags.size == 2) {
+    sizeIcon();
+  }
+  if (fieldFlags.date == 2) {
+    dateIcon();
+  }
+
+  /*
+   * Key icon
+   */
+  function keyIcon() {
+
+    var xKey = radius * Math.cos(Math.PI / 4);
+    var yKey = -radius * Math.sin(Math.PI / 4);
+    var keySvgGroup = svg.append("g")
+      .attr("transform", "translate(" + xKey + ", " + yKey + ")");
+
+
+    keySvgGroup.append("svg:image")
+      .attr("xlink:href", "../lib/d3vis/icons/keyIcon.svg")
+      .attr("width", 10)
+      .attr("height", 10);
+  }
+
+  /*
+   * Type (icon)
+   */
+  function typeIcon() {
+    var xKey = radius * Math.cos(Math.PI / 4);
+    var yKey = radius * Math.sin(Math.PI / 4);
+    var typeSvgGroup = svg.append("g")
+      .attr("transform", "translate(" + xKey + ", " + yKey + ")");
+
+    typeSvgGroup.append("svg:image")
+      .attr("xlink:href", "../lib/d3vis/icons/typeIcon.svg")
+      .attr("width", 10)
+      .attr("height", 10);
+  }
+
+  /*
+   * size (icon)
+   */
+  function sizeIcon() {
+
+    var xKey = -radius * Math.cos(Math.PI / 4);
+    var yKey = radius * Math.sin(Math.PI / 4);
+    var sizeSvgGroup = svg.append("g")
+      .attr("transform", "translate(" + xKey + ", " + yKey + ")");
+
+    sizeSvgGroup.append("svg:image")
+      .attr("xlink:href", "../lib/d3vis/icons/sizeIcon.svg")
+      .attr("width", 10)
+      .attr("height", 10);
+
+  }
+
+  /*
+   * date (calender icon)
+   */
+  function dateIcon() {
+    var xKey = -radius * Math.cos(Math.PI / 4);
+    var yKey = -radius * Math.sin(Math.PI / 4);
+    var dateSvgGroup = svg.append("g")
+      .attr("transform", "translate(" + xKey + ", " + yKey + ")");
+
+    dateSvgGroup.append("svg:image")
+      .attr("xlink:href", "../lib/d3vis/icons/dateIcon.svg")
+      .attr("width", 10)
+      .attr("height", 10);
+  }
+}
+
+
+/********************************************************************************************************
+ * If this is the first node then just, draw a point.
+ * Else draw a connecting line joining the last coordinate.
+ ********************************************************************************************************/
+var temporalAxis = {
+
+  pointRadius : 3,
+  tickLength : 15,
+  svgCanvas: null,
+  pointCoordinate: new Array(),
+
+  /*
+   * Update the current node co-ordinate
+   */
+  pushPointCoordinate: function (arg) {
+    this.pointCoordinate.push(arg);
+  },
+
+  getLastPointCoordinate: function () {
+    if (this.pointCoordinate.length) {
+      return this.pointCoordinate[this.pointCoordinate.length - 1];
+    } else {
+      return {};
+    }
+  }
+};
+
+
+function drawTemporalAxis(svgCanvas, coordinate, newSearch) {
+
+  var lastPointCoordinate = temporalAxis.getLastPointCoordinate();
+
+  var pointCoordinate = {};
+  pointCoordinate["x"] = coordinate["x"];
+  pointCoordinate["y"] = coordinate["y"] + queryGraph.glyphSize * 0.5 + temporalAxis.tickLength;
+  console.log("drawTemporalAxis- coordinate",  coordinate, ", lastCoordinate: ", lastPointCoordinate, ", pointCoordinate: ", pointCoordinate);
+  temporalAxis.pushPointCoordinate(pointCoordinate);
+
+
+  if (Object.getOwnPropertyNames(lastPointCoordinate).length === 0) {
+    console.log("if-cond, lastCoordinate", lastPointCoordinate);
+    // no need to draw any line
+  } else {
+    console.log("else-cond");
+
+    svgCanvas.append("line")
+      .attr("x1", lastPointCoordinate["x"])
+      .attr("y1", lastPointCoordinate["y"])
+      .attr("x2", pointCoordinate["x"])
+      .attr("y2", pointCoordinate["y"])
+      .style("stroke", "gray")
+      .style("stroke-dasharray", function () {
+        if (newSearch) {
+          return "none";
+        } else {
+          return "5, 5";
+        }
+      });
+  }
+
+  // ticks
+  svgCanvas.append("line")
+    .attr("x1", pointCoordinate["x"])
+    .attr("y1", pointCoordinate["y"] - temporalAxis.tickLength)
+    .attr("x2", pointCoordinate["x"])
+    .attr("y2", pointCoordinate["y"] + temporalAxis.tickLength)
+    .style("stroke", "gray")
+    .style("stroke-dasharray", "none");
+
+
+  // point
+  svgCanvas.append("circle")
+    .attr("cx", pointCoordinate["x"])
+    .attr("cy", pointCoordinate["y"])
+    .attr("r", temporalAxis.pointRadius)
+    .style("fill", "gray")
+    .on("mouseover", function () {
+      d3.select(this)
+        .style("fill", "orange");
+    })
+    .on("mouseout", function () {
+      d3.select(this)
+        .style("fill", "gray");
+    })
+    .on("click", function() {
+      alert(JSON.stringify(queryGraph.getLastQuery()));
+      $scope.reformulatedQuery.push()
+    });
+
+
+}
+
+
+/********************************************************************************************************
+ * Draw edge or edges between source nodes and a destination node.
+ * Color - change color on mouse hover
+ * src [[x, y], [x, y], ...]
+ * dest [x, y]
+ ********************************************************************************************************/
+
+var link = {
+  counter: 0,
+  offset: 3,
+  ticks: 10
+};
+
+function drawLink(svg, points) {
+
+  console.log("points:", points, link.ticks);
+
+  var offset = link.offset;
+  console.log("offset:", offset);
+  var lineData = [];
+  for (var i = 0; i < points.length; ++i) {
+
+    var pX = points[i][0];
+    var pY = points[i][1] + offset;
+
+    lineData.push({"x": pX, "y": pY});
+    lineData.push({"x": pX, "y": pY + link.ticks});
+    lineData.push({"x": pX, "y": pY});
+  }
+  link.counter = link.counter + link.offset;
+  console.log(lineData);
+
+  var lineFunction = d3.svg.line()
+    .x(function (d) {
+      return d.x;
+    })
+    .y(function (d) {
+      return d.y;
+    })
+    .interpolate("linear");
+
+  svg.append("path")
+    .attr("d", lineFunction(lineData))
+    .style("stroke", "blue")
+    .style("stroke-dasharray", "none")
+    .on("mouseover", function () {
+      d3.select(this)
+        .style("stroke", "#FFD700");
+    })
+    .on("mouseout", function () {
+      d3.select(this)
+        .style("stroke", "blue");
+    });
+
+}

@@ -1,0 +1,380 @@
+<div class="container-fluid">
+
+  <div class="row">
+
+    <div class="col-lg-3">
+      <div class="row">
+        <form>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="input-group">
+                <div class="input-group-addon">Name</div>
+                <input type="text" class="form-control input-md" placeholder="File name " ng-model="query.key" value="">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="input-group">
+                <div class="input-group-addon">Type&nbsp;</div>
+                <input type="text" class="form-control input-md" ng-model="query.type" placeholder="File type" value="">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-addon">Size&nbsp;&nbsp;</div>
+                <input type="text" class="form-control input-md" ng-model="query.sizefrom" placeholder="from" value="">
+
+                <div class="input-group-addon" style="width:10%">
+                  <select ng-model="query.sizefrom_unit" class="sone">
+                    <option value="B">B</option>
+                    <option value="KB">KB</option>
+                    <option value="MB">MB</option>
+                    <option value="GB">GB</option>
+                    <option value="TB">TB</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <input type="text" class="form-control input-md" ng-model="query.sizeto" placeholder="to" value="">
+
+                <div class="input-group-addon">
+                  <select ng-model="query.sizeto_unit" class="sone">
+                    <option value="B">B</option>
+                    <option value="KB">KB</option>
+                    <option value="MB">MB</option>
+                    <option value="GB">GB</option>
+                    <option value="TB">TB</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-addon">Date&nbsp;</div>
+                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="query.datefrom"
+                       is-open="opened" max-date="todayDate" datepicker-options="dateOptions" close-text="Close"
+                       placeholder="from" value="" ng-change="datefromChange()">
+            <span class="input-group-btn">
+            <button type="button" class="form-control btn btn-default" ng-click="open($event)"><i
+              class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="input-group">
+                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="query.dateto"
+                       is-open="opened2" max-date="todayDate" datepicker-options="dateOptions" close-text="Close"
+                       placeholder="to" value="" ng-change="datetoChange()"/>
+               <span class="input-group-btn">
+               <button type="button" class="form-control btn btn-default" ng-click="open2($event)"><i
+                 class="glyphicon glyphicon-calendar"></i></button>
+               </span>
+              </div>
+            </div>
+          </div>
+
+          <br/>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <button type="button" class="btn btn-primary pull-right" ng-click="search()">
+                <span class="glyphicon glyphicon-search"> </span> Search
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <hr class="style-two">
+
+      <br/>
+      <br/>
+      <br/>
+
+
+    </div>
+
+
+    <div class="col-lg-9">
+      <div class="row">
+        <div id="tableview" class="mousescroll">
+          <table class="table table-condensed">
+            <!-- caption class="text-primary"><b>Search Results</b></caption -->
+            <thead>
+
+            <tr>
+              <div class="row">
+                <th class="col-sm-1 col-md-1 col-lg-1">Select</th>
+                <th class="col-sm-1 col-md-1 col-lg-2">Name</th>
+                <th class="col-sm-1 col-md-1 col-lg-1">Type</th>
+                <th class="col-sm-1 col-md-1 col-lg-1">Size</th>
+                <th class="col-sm-1 col-md-1 col-lg-1">Date</th>
+                <th class="col-sm-1 col-md-1 col-lg-1">User</th>
+                <th class="col-sm-1 col-md-1 col-lg-1">Group</th>
+              </div>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr ng-class-odd="'odd'" ng-class-even="'even'" ng-repeat="doc in searchresult">
+              <div class="row">
+                <td class="col-lg-1">
+                  <button type="button" class="btn btn-default btn-md" ng-hide="doc.select" popover="Select it"
+                          ng-click="selectDocument($index)">
+                    <span class="glyphicon glyphicon-ok-circle"> </span>
+                  </button>
+                  <button type="button" class="btn btn-default btn-md" ng-show="doc.select" popover="Select it"
+                          ng-click="deselectDocument($index)">
+                    <span class="glyphicon glyphicon-ok-circle selection_glyph"> </span>
+                  </button>
+                </td>
+                <td class="col-sm-1 col-md-1 col-lg-2">{{doc.name}}</td>
+                <td class="col-sm-1 col-md-1 col-lg-1">{{doc.type}}</td>
+                <td class="col-sm-1 col-md-1 col-lg-1"> {{doc.size}}</td>
+                <td class="col-sm-1 col-md-1 col-lg-1">{{doc.date}}</td>
+                <td class="col-sm-1 col-md-1 col-lg-1">{{doc.user}}</td>
+                <td class="col-sm-1 col-md-1 col-lg-1">{{doc.group}}</td>
+              </div>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <script src="app/assets/lib/sbar.js"></script>
+          <script>
+            // $scope.setCoordinates();
+            /*$('#tableview').slimscroll({
+             color: '#00f',
+             size: '10px',
+             // width: '150px',
+             height: '1000px'
+             });*/
+          </script>
+        </div>
+
+      </div>
+
+      <br/>
+
+      <div class="row">
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-primary" popover-trigger="mouseenter"
+                  ng-click="viewDialog('view_records')" ng-disabled="!resultPortfolio.length">
+            View
+          </button>
+          <button type="button" class="btn btn-primary" popover-trigger="mouseenter" ng-click="saveResultPortfolio()"
+                  ng-disabled="!resultPortfolio.length || disablePortfolioButton">
+            Save
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+  <!-- END topmost row (search form, result table) -->
+
+  <div id="fcgraphView" class="row">
+    <hr class="style-four">
+    <div class="col-md-12 col-l-12">
+      <!--div id="fcgraph"></--div-->
+      <fcgraph></fcgraph>
+    </div>
+  </div>
+
+  <div id="radialgraphView" class="row">
+    <hr class="style-four">
+
+    <!-- Query Provenance Visualisation -->
+    <div class="row">
+
+      <!--
+      <div class="col-md-12 col-lg-12">
+
+        <div class="col-md-2 col-lg-2">
+          <radialgraph></radialgraph>
+        </div>
+
+        <div class="col-md-10 col-lg-10">
+          <div class="row">
+            <queryprovis></queryprovis>
+          </div>
+          <div class="row">
+            <resultprovis></resultprovis>
+          </div>
+        </div>
+      </div>
+      -->
+
+      <div class="modal-body">
+        <div class="first-column">
+          <radialgraph></radialgraph>
+        </div>
+        <div class="second-column">
+          <div class="row">
+            <queryprovis></queryprovis>
+          </div>
+          <div class="row">
+            <resultprovis></resultprovis>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <!-- The view and Save option for selected query for reformulation -->
+  <div class="row" ng-controller="mainpageController">
+    <div class="col-md-12 col-lg-12">
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary" popover-trigger="mouseenter"
+                ng-click="openSelectedQueryDialog()">
+          View
+        </button>
+        <button type="button" class="btn btn-primary" popover-trigger="mouseenter"
+                ng-click="sendReformulatedQuery()">
+          Reformulate
+        </button>
+
+        <button type="button" class="btn btn-primary" popover-trigger="mouseenter"
+                ng-click="saveSession()">
+          Save Session
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Portfolio Dialog -->
+<script type="text/ng-template" id="view_rows">
+  <div class="modal-header">
+    <h2 class="modal-title">Portfolio</h2>
+  </div>
+  <div class="modal-body">
+    <table class="table table-condensed">
+      <caption class="text-primary">Records selected: {{seldocs.length}}</b></caption>
+      <thead>
+      <div class="row">
+        <tr>
+          <th class="col-sm-2 col-md-1 col-lg-1">Name</th>
+          <th class="col-sm-1 col-md-1 col-lg-1">Type</th>
+        </tr>
+      </div>
+      </thead>
+      <tbody>
+      <tr ng-repeat="document in seldocs track by $index">
+        <div class="row">
+          <td>{{document.name}}</td>
+          <td>{{document.type}}</td>
+        </div>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Close</button>
+    <!--button class="btn btn-warning" ng-click="cancel()">Cancel</button -->
+  </div>
+</script>
+
+</div>
+
+
+<!--
+START Provenance Dialogs
+-->
+
+<!-- The query list table-->
+
+<div class="row">
+  <div class="col-md-10">
+
+    <querylist>
+      <table class="table table-condensed" ng-show="queryDataArray.length">
+
+        <thead>
+        <div class="row">
+          <tr>
+            <th class="col-sm-2 col-md-1 col-lg-1">Key</th>
+            <th class="col-sm-1 col-md-1 col-lg-1">Type</th>
+            <th class="col-sm-1 col-md-1 col-lg-1">Size</th>
+            <th class="col-sm-1 col-md-1 col-lg-1">Date</th>
+          </tr>
+        </div>
+        </thead>
+        <tbody>
+        <tr ng-repeat="query in queryDataArray track by $index">
+          <div class="row">
+            <td>{{query.key}}</td>
+            <td>{{query.type}}</td>
+            <td>{{query.sizefrom}} - {{query.sizeto}}</td>
+            <td>{{query.datefrom}} - {{query.dateto}}</td>
+
+          </div>
+        </tbody>
+      </table>
+    </querylist>
+
+  </div>
+</div>
+
+
+<script type="text/ng-template" id="edit_reformulated_query">
+  <div class="modal-header">
+    <h2 class="modal-title">Edit</h2>
+  </div>
+  <div class="modal-body">
+    <ui>
+      <li ng-repeat="qry in selectedQueries track by $index">
+        {{qry.key}} - {{qry.type}} - {{qry.sizefrom}} to {{qry.sizeto}} - {{qry.datefrom}} to {{qry.dateto}}
+      </li>
+    </ui>
+
+    <!--form class="form-horizontal" role="form">
+      <div class="form-group">
+        <textarea  class="form-control" ng-model="selectedQueries.newQuery">  </textarea>
+      </div>
+    </form-->
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  </div>
+</script>
+
+<!-- End Reformulation dialog -->
+
+
+<!-- Late discovery list table-->
+
+<div class="row">
+  <div class="col-md-10">
+
+    <latediscovery></latediscovery>
+
+  </div>
+</div>
+
+<!-- END Provenance Dialogs -->
+

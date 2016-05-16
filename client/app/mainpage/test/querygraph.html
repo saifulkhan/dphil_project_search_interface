@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title> Query Graph </title>
+    <script type="text/javascript" src="../../../client/bower_components/angular/angular.js"> </script>
+
+    <script type="text/javascript" src="../assets/lib/d3.v3.js"> </script>
+		<script type="text/javascript" src="../assets/lib/d3vis/querygraph.js"> </script>
+		<script type="text/javascript" src="../assets/lib/d3vis/common.js"> </script>
+
+		<link rel="stylesheet" type="text/css" href="../assets/lib/font-awesome-4.2.0/css/font-awesome.min.css"/> </link>
+		<link rel="stylesheet" type="text/css" href="../assets/lib/d3vis/querygraph.css" > </link>
+
+	</head>
+
+	<body>
+		<p id="querygraph">
+		<script type="text/javascript">
+
+        var query1 = {
+          "key": "apple",
+          "type": "",
+          "sizefrom": "",
+          "sizeto": "",
+          "datefrom": "",
+          "dateto": ""
+        };
+
+        var query2 = {
+          "key": "apple",
+          "type": "",
+          "sizefrom": "2 MB",
+          "sizeto": "2 GB",
+          "datefrom": "2014-3-01",
+          "dateto": "2014-07-01"
+
+        };
+
+        var query3 = {
+          "key": "apple, computer",
+          "type": "",
+          "sizefrom" : "2 MB",
+          "sizeto": "2 GB",
+          "datefrom": "2014-11-01",
+          "dateto": "2014-01-01"
+        };
+
+        var query4 = {
+          "key": "apple, computer",
+          "type": "docx, pdf",
+          "sizefrom": "",
+          "sizeto": "",
+          "datefrom": "2014-11-01",
+          "dateto": "2014-01-01"
+        };
+
+        var provVisCoordinates = {
+          x: 0,
+          y: 0,
+          w: window.innerWidth,
+          h: window.innerHeight
+        };
+
+        var queryProvVisHeight = 150;
+
+        processQuery(query1, "#querygraph", provVisCoordinates);
+        processQuery(query2, "#querygraph", provVisCoordinates);
+        processQuery(query3, "#querygraph", provVisCoordinates);
+        processQuery(query4, "#querygraph", provVisCoordinates);
+
+
+
+		</script>
+	</body>
+</html>
