@@ -54,11 +54,13 @@ var resultGlyph = {
     if (this.svgCanvas == null) {
       this.svgCanvas = d3.select(this.selector)
         .append("svg")
-        .attr("height", this.svgCoordinate.h)
-        .attr("width", this.svgCoordinate.w)
         .attr("x", this.svgCoordinate.x)
         .attr("y", this.svgCoordinate.y)
+        .attr("height", this.svgCoordinate.h)
+        .attr("width", this.svgCoordinate.w)
         .style("background", "none");
+        //.attr("transform", function(d) { return "translate(" + 0 + "," - this.svgCoordinate.h  + ")"; });
+
     }
     return this.svgCanvas;
   },
@@ -97,7 +99,7 @@ function processResult(data, selector, svgCoordinate) {
   resultGlyph.selector = selector;
   resultGlyph.svgCoordinate = svgCoordinate;
 
-  console.log("updateResultGraph: result, coordinates, selector -", result, resultGlyph.coordinates, resultGlyph.selector);
+  console.log("processResult", resultGlyph.selector, resultGlyph.coordinates);
 
   function dbgPrint(name, array) {
     var str = "";
@@ -250,6 +252,7 @@ function drawResultGraph(dataset) {
   var lastCoordinate = resultGlyph.getLastNodeCoordinate();
   if (Object.getOwnPropertyNames(lastCoordinate).length === 0) {
     coordinate["x"] =  resultGlyph.distanceX * 0.5;
+    // TODO: position hardcoded for laptop = 15
     coordinate["y"] =  resultGlyph.distanceX * 0.5;
   } else {
     coordinate["x"] = lastCoordinate["x"] + resultGlyph.glyphSize + resultGlyph.distanceX;

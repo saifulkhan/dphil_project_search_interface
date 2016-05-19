@@ -31,28 +31,29 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
   };
 
   $rootScope.radialgraphFrame = {
+    width: $rootScope.windowCoordinates.height * 0.45,
     height: $rootScope.windowCoordinates.height * 0.45,// 50% space is assigned to radial graph or frame or third row
-    width: $rootScope.windowCoordinates.height * 0.45  // height and width same for radial graph
-
   };
 
   // the remaining space will be divided among query and result
 
   $rootScope.queryGraphCoordinates = {
-    x: 0,//$rootScope.radialgraphFrame.width,
+    x: 20,  // TODO: position hardcoded for laptop = 20
     y: 0,
-    w: $rootScope.windowCoordinates.width - $rootScope.radialgraphFrame.width,
+    w: $rootScope.windowCoordinates.width - $rootScope.radialgraphFrame.width, // - $rootScope.radialgraphFrame.width,
     h: $rootScope.radialgraphFrame.height / 2
   };
 
   $rootScope.resultGraphCoordinates = {
-    x: 0, //$rootScope.queryGraphCoordinates.x,
-    y: $rootScope.queryGraphCoordinates.y + $rootScope.queryGraphCoordinates.h / 2,
+    x: $rootScope.queryGraphCoordinates.x,
+    y: $rootScope.queryGraphCoordinates.y + $rootScope.queryGraphCoordinates.h,
     w: $rootScope.queryGraphCoordinates.w,
     h: $rootScope.queryGraphCoordinates.h
   };
 
-  $scope.setCoordinates = function() {
+  $rootScope.queryNumber = 0;
+
+  $scope.setCoordinates = function () {
 
     $('#tableview').slimscroll({
       color: '#00f',
@@ -62,19 +63,19 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
     });
 
     /*
-    $('#radialgraphwidth').width(
+     $('#radialgraphwidth').width(
 
-      $rootScope.radialgraphFrame.width
-    );
+     $rootScope.radialgraphFrame.width
+     );
 
-    //$('#glyphviewwidth').width(
-      //$rootScope.radialgraphFrame.width
-    //);
+     //$('#glyphviewwidth').width(
+     //$rootScope.radialgraphFrame.width
+     //);
      */
 
   };
 
-  $scope.$on('$viewContentLoaded', function() {
+  $scope.$on('$viewContentLoaded', function () {
     //call it after the page is loaded
     $scope.setCoordinates();
   });
@@ -119,13 +120,16 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
 
   /***************************************************************************************************************
    * When the page loads first time.
+   * Treemap
    ****************************************************************************************************************/
 
-  $scope.$on('$viewContentLoaded', function () {
-    //alert("Page loaded:");
 
-    $scope.provis_window = $window.open("/searchspace", "Search Space: Treemap & Glyph", "height=800,width=1600");
-  });
+
+   $scope.$on('$viewContentLoaded', function () {
+   //alert("Page loaded:");
+
+   $scope.provis_window = $window.open("/searchspace", "Search Space: Treemap & Glyph", "height=850,width=1500");
+   });
 
 
   /***************************************************************************************************************
@@ -169,7 +173,6 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
   }
 
 
-
   /*****************************************************************************************************************
    * Search http request
    * Search form: Input {"Name: ", "Type: [a, b, c]", "size:[sizex(unit), sizey(unit)]", "date:[date1, date2]}
@@ -177,46 +180,52 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
    * Send the search result to do draw gyphs
    ****************************************************************************************************************/
 
+  $scope.searchQuery = {
+    key: "",
+    type: "",
+    sizefrom: "",
+    sizeto: "",
+    datefrom: "",
+    dateto: ""
+  };
+
   $scope.search = function () {
 
-    /*
-     * Read query fields from the search query form.
-     */
+    // empty
+    $scope.searchQuery.key = "";
+    $scope.searchQuery.type = "";
+    $scope.searchQuery.sizefrom = "";
+    $scope.searchQuery.sizeto = "";
+    $scope.searchQuery.datefrom = "";
+    $scope.searchQuery.dateto = "";
+
 
     // When autoFeedback is true then send explicit feedback.
     if ($scope.autoFeedback) {
       $scope.saveResultPortfolio();
     }
 
-    var newquery = {
-      key: "",
-      type: "",
-      sizefrom: "",
-      sizeto: "",
-      datefrom: "",
-      dateto: ""
-    };
+    // Read query fields from the search query form.
+    $scope.searchQuery['key'] = $scope.query["key"];
+    $scope.searchQuery['type'] = $scope.query["type"];
 
-    newquery['key'] = $scope.query["key"];
-    newquery['type'] = $scope.query["type"];
-
-    newquery['sizefrom'] = $scope.query["sizefrom"];
-    if (newquery["sizefrom"].length > 0) {
-      newquery['sizefrom'] = newquery['sizefrom'] + " " + $scope.query["sizefrom_unit"];
+    $scope.searchQuery['sizefrom'] = $scope.query["sizefrom"];
+    if ($scope.searchQuery["sizefrom"].length > 0) {
+      $scope.searchQuery['sizefrom'] = $scope.searchQuery['sizefrom'] + " " + $scope.query["sizefrom_unit"];
     }
 
-    newquery['sizeto'] = $scope.query["sizeto"];
-    if (newquery["sizeto"].length > 0) {
-      newquery['sizeto'] = newquery['sizeto'] + " " + $scope.query["sizeto_unit"];
+    $scope.searchQuery['sizeto'] = $scope.query["sizeto"];
+    if ($scope.searchQuery["sizeto"].length > 0) {
+      $scope.searchQuery['sizeto'] = $scope.searchQuery['sizeto'] + " " + $scope.query["sizeto_unit"];
     }
 
-    newquery.datefrom = $scope.query.datefrom;
-    newquery.dateto = $scope.query.dateto;
+    $scope.searchQuery.datefrom = $scope.query.datefrom;
+    $scope.searchQuery.dateto = $scope.query.dateto;
 
     /*
      * Check if empty query-key then do nothing.
      */
-    if (!newquery['key'].length) {
+    if (!$scope.searchQuery['key'].length) {
 
       alert("Enter search keywords!")
       return;
@@ -227,7 +236,9 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
      * Broadcast the new query.
      * This event will be processed by queryProvVisDirective: draw query glyph.
      */
-    $scope.$broadcast('event:newquery-received', newquery);
+
+    // TODO: check? Now when result/portfolio is saved thenonly we show the query
+    //$scope.$broadcast('event:newquery-received', newquery);
 
 
     /*
@@ -235,7 +246,7 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
      * Receive the result.
      * Write to localstorage i.e., send to the second window.
      */
-    $http.post('/api/common/search', newquery).success(function (response) {
+    $http.post('/api/common/search', $scope.searchQuery).success(function (response) {
 
       $scope.disablePortfolioButton = false;
       $scope.autoFeedback = true;
@@ -339,21 +350,21 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
   function dateToString(datevalue) {
 
     var datestr = "";
-    if(angular.isDefined(datevalue) && datevalue) {
+    if (angular.isDefined(datevalue) && datevalue) {
 
       var month = datevalue.getMonth() + 1;
-      datestr = datevalue.getFullYear() + "-" +  month + "-" + datevalue.getDate();
+      datestr = datevalue.getFullYear() + "-" + month + "-" + datevalue.getDate();
     }
 
     console.log("dateToString: datestr= ", datestr, ", datevalue= ", datevalue)
     return datestr;
   }
 
-  $scope.datefromChange = function() {
+  $scope.datefromChange = function () {
     $scope.query.datefrom = dateToString($scope.query.datefrom);
   }
 
-  $scope.datetoChange = function() {
+  $scope.datetoChange = function () {
     $scope.query.dateto = dateToString($scope.query.dateto);
   }
 
@@ -413,14 +424,21 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
 
     $scope.disablePortfolioButton = true;
     $scope.autoFeedback = false;
+
+    // Show the query
+    // TODO: can two broadcast be merged?
+    $rootScope.queryNumber++;
+    $scope.$broadcast('event:searchquery-received', $scope.searchQuery);
+
+    // Show the results
     $scope.$broadcast('event:saved-result-received', $scope.searchresult);
-    $http.post('/api/common/feedback', $scope.searchresult).success(function(response){
-      if(response){
+    $http.post('/api/common/feedback', $scope.searchresult).success(function (response) {
+      if (response) {
 
       }
 
     })
-      .error(function(data, status, head, config){
+      .error(function (data, status, head, config) {
 
       });
   }
@@ -429,8 +447,6 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
   /*****************************************************************************************************************
    * Start: of Provenance code
    *****************************************************************************************************************/
-
-
 
   $scope.queryDataArray = [];
   $scope.resultData = [];
@@ -450,23 +466,23 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
 
     // Intersect the selected queries.
     //var newQuery = { key: "", type: "", sizefrom: "", sizeto: "", datefrom: "", dateto: ""};
-    var newQuery = intersectQueries(selectedQueries);
+    var mergedQuery = intersectQueries(selectedQueries);
     selectedQueryFactory.clear();
 
     // Update the search form with the reformulated query.
-    $scope.query["key"]     = newQuery["key"];
-    $scope.query["type"]    = newQuery["type"];
+    $scope.query["key"] = mergedQuery["key"];
+    $scope.query["type"] = mergedQuery["type"];
 
-    var token = newQuery["sizefrom"].split(" ");
+    var token = mergedQuery["sizefrom"].split(" ");
     $scope.query["sizefrom"] = token[0];
     $scope.query["sizefrom_unit"] = token[1];
 
-    token = newQuery["sizeto"].split(" ");
+    token = mergedQuery["sizeto"].split(" ");
     $scope.query["sizeto"] = token[0];
     $scope.query["sizeto_unit"] = token[1];
 
-    $scope.query["datefrom"] = newQuery["datefrom"];
-    $scope.query["dateto"] = newQuery["dateto"];
+    $scope.query["datefrom"] = mergedQuery["datefrom"];
+    $scope.query["dateto"] = mergedQuery["dateto"];
 
   } // END sendReformulatedQuery.
 
@@ -522,13 +538,13 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
    ******************************************************************************************************************/
   $scope.saveSession = function () {
     var status = {"signal": true};
-    $http.post('/api/common/savesession', status).success(function(response){
-      if(response){
+    $http.post('/api/common/savesession', status).success(function (response) {
+      if (response) {
 
       }
 
     })
-      .error(function(data, status, head, config){
+      .error(function (data, status, head, config) {
 
       });
 
@@ -560,11 +576,6 @@ enterpriseSearchApp.factory("selectedQueryFactory", function () {
 }); // End: factory
 
 
-
-
-
-
-
 /*********************************************************************************************************************
  * Directive: Selected query (provenance) list dialog
  ********************************************************************************************************************/
@@ -577,15 +588,15 @@ enterpriseSearchApp.directive("querylist", function () {
   directive.link = function ($scope, elements, attributes) {
 
     var dialogOptions = {
-      "title": "Queries: List View",
-      "width": 300,
-      "height": 200,
-      "modal": false,
-      "resizable": true,
-      "closeOnEscape": false,
-      "position": {my: 'bottom-50', at: 'right'},
-      "draggable": true,
-      "close": function () {
+      title: "Queries: List View",
+      width: 300,
+      height: 200,
+      modal: false,
+      resizable: true,
+      closeOnEscape: false,
+      position: {my: "left top", at: "left bottom"},
+      draggable: true,
+      close: function () {
         $(this).remove();
       }
     };
@@ -627,7 +638,10 @@ enterpriseSearchApp.directive("latediscovery", function () {
       modal: false,
       resizable: true,
       closeOnEscape: false,
-      position: {my: 'bottom-50', at: 'right'},
+      position: {
+        my: "left top",
+        at: "left bottom"
+      },
       draggable: true,
       close: function () {
         $(this).remove();

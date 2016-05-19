@@ -1,11 +1,11 @@
-
 /***********************************************************************
- * Links
+ * Links or edges
+ * SPG:Collaboration Summary
  ***********************************************************************/
 .link {
     fill: none;
-    /*stroke: #ccc;*/
     stroke-width: 1px;
+    /*stroke: #ccc;*/
 }
 
 .link:hover {

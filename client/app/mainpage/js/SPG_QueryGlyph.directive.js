@@ -22,14 +22,14 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         selector: "",
 
         glyphSize: 50,
-        iconSize : 11,
+        iconSize: 11,
         distanceX: 60,
         nodeCoordinate: new Array(), // [{"x":, "y"}, ..]
         queryArray: [],
         svgCanvas: null,
-        fieldFlags: {},  // attribute: [key, type, size, date]; value: [unset = 0 , set = 1, changed = 2]
+        queryChangeFlag: {},  // attribute: [key, type, size, date]; value: [unset = 0 , set = 1, changed = 2]
 
-        newQueryFlag : true,
+        newQueryFlag: true,
 
         /*
          * Update the current node co-ordinate
@@ -55,7 +55,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
               .attr("y", this.svgCoordinate.y)
               .attr("width", this.svgCoordinate.w)
               .attr("height", this.svgCoordinate.h)
-              .style("background", "none");
+              .style("background", "none"); // debug: make it colored (blue) to see the canvas pos.
           }
           return this.svgCanvas;
         },
@@ -86,12 +86,13 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
       function processQuery(query, selector, svgCoordinate) {
 
 
-        console.log("Directive- updateQueryGraph", query, selector, svgCoordinate);
+        console.log("processQuery", query, selector, svgCoordinate);
 
         queryGraph.selector = selector;
         queryGraph.svgCoordinate = svgCoordinate;
 
-        var fieldFlags = {key: 0, type: 0, size: 0, date: 0};
+        // 0 = unset, 1 = set & same, 2 = set & different
+        var queryChangeFlag = {key: 0, type: 0, size: 0, date: 0};
 
         var queryLast = queryGraph.getLastQuery();
         console.log("last:", queryLast);
@@ -105,28 +106,28 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
          * Compare with last query - and process the query fiellds
          */
         if (query["key"].length == 0) {
-          fieldFlags["key"] = 0;
+          queryChangeFlag["key"] = 0;
         } else if (queryLast) {                          // At the very first time it is null, so queryLast["key"] will give can't read property error
           if (query["key"].toLowerCase() == queryLast["key"].toLowerCase()) {
-            fieldFlags["key"] = 1;
+            queryChangeFlag["key"] = 1;
           } else {
-            fieldFlags["key"] = 2;
+            queryChangeFlag["key"] = 2;
           }
         } else {
-          fieldFlags["key"] = 2;
+          queryChangeFlag["key"] = 2;
         }
 
         // type
         if (query["type"].length == 0) {
-          fieldFlags["type"] = 0;
+          queryChangeFlag["type"] = 0;
         } else if (queryLast && queryLast["type"]) {
           if (query["type"].toLowerCase() == queryLast["type"].toLowerCase()) {
-            fieldFlags["type"] = 1;
+            queryChangeFlag["type"] = 1;
           } else {
-            fieldFlags["type"] = 2;
+            queryChangeFlag["type"] = 2;
           }
         } else {
-          fieldFlags["type"] = 2;
+          queryChangeFlag["type"] = 2;
         }
 
         // size
@@ -139,11 +140,11 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         }
 
         if (size == "") {
-          fieldFlags["size"] = 0;
+          queryChangeFlag["size"] = 0;
         } else if (size == lastSize) {
-          fieldFlags["size"] = 1;
+          queryChangeFlag["size"] = 1;
         } else {
-          fieldFlags["size"] = 2;
+          queryChangeFlag["size"] = 2;
         }
 
 
@@ -157,15 +158,19 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         }
 
         if (date == "") {
-          fieldFlags["date"] = 0;
+          queryChangeFlag["date"] = 0;
         } else if (date == lastDate) {
-          fieldFlags["date"] = 1;
+          queryChangeFlag["date"] = 1;
         } else {
-          fieldFlags["date"] = 2;
+          queryChangeFlag["date"] = 2;
         }
 
-        queryGraph.fieldFlags = fieldFlags;
-        queryGraph.pushLastQuery(query);
+        queryGraph.queryChangeFlag = queryChangeFlag;
+        console.log("queryChangeFlag:" + JSON.stringify(queryChangeFlag)
+          + "\nquery:" + JSON.stringify(query)
+          + "\nqueryLast:" + JSON.stringify(queryLast));
+
+        queryGraph.pushLastQuery({key: query.key, type: query.type, size: query.size, date: query.date});
 
         drawQueryGraph();
       }
@@ -183,18 +188,19 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         var lastCoordinate = queryGraph.getLastNodeCoordinate();
         if (Object.getOwnPropertyNames(lastCoordinate).length === 0) {
           coordinate["x"] = (queryGraph.glyphSize + queryGraph.distanceX) * 0.5;
-          coordinate["y"] = queryGraph.glyphSize + queryGraph.distanceX / 2 - 20 + queryGraph.svgCoordinate.h / 2;
+          // TODO: position hardcoded for laptop = 80
+          coordinate["y"] = queryGraph.glyphSize + queryGraph.distanceX / 2 - 80 + queryGraph.svgCoordinate.h / 2;
         } else {
           coordinate["x"] = lastCoordinate["x"] + queryGraph.glyphSize + queryGraph.distanceX;
-          coordinate["y"] = lastCoordinate["y"] ;
+          coordinate["y"] = lastCoordinate["y"];
         }
         queryGraph.pushNodeCoordinate(coordinate);
 
-        console.log("updateQueryGraph- lastCoordinate: ", lastCoordinate, ", coordinate: ", coordinate);
+        console.log("drawQueryGraph() : lastCoordinate", lastCoordinate, ", coordinate: ", coordinate);
 
         var svgCanvas = queryGraph.getCanvas();
         var svg = svgCanvas.append("g")
-          .attr("transform", "translate(" + coordinate["x"] + ", " + coordinate["y"] +  ")");
+          .attr("transform", "translate(" + coordinate["x"] + ", " + coordinate["y"] + ")");
 
         // draw the axis
         drawTemporalAxis(svgCanvas, coordinate);
@@ -202,8 +208,8 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
 
         var radius = queryGraph.glyphSize * 0.5;
         var query = queryGraph.getLastQuery();
-        var fieldFlags = queryGraph.fieldFlags;
-        console.log("query", query, "; flags", fieldFlags);
+        var queryChangeFlag = queryGraph.queryChangeFlag;
+        console.log("query", query, "; flags", queryChangeFlag);
 
         var key_pie = d3.svg.arc()
           .innerRadius(0)
@@ -214,7 +220,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         svg.append("path")
           .attr("d", key_pie)
           .attr("class", "wedge")
-          .style("fill", wedgeColor("key", fieldFlags.key))
+          .style("fill", wedgeColor("key", queryChangeFlag.key))
           .append("title")
           .text(function (d) {
             return query.key;
@@ -229,7 +235,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         svg.append("path")
           .attr("d", type_pie)
           .attr("class", "wedge")
-          .style("fill", wedgeColor("type", fieldFlags.type))
+          .style("fill", wedgeColor("type", queryChangeFlag.type))
           .append("title")
           .text(function (d) {
             return query.type;
@@ -244,7 +250,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         svg.append("path")
           .attr("d", size_pie)
           .attr("class", "wedge")
-          .style("fill", wedgeColor("size", fieldFlags.size))
+          .style("fill", wedgeColor("size", queryChangeFlag.size))
           .append("title")
           .text(function (d) {
             return query.sizefrom + " to " + query.sizeto;
@@ -259,7 +265,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         svg.append("path")
           .attr("d", date_pie)
           .attr("class", "wedge")
-          .style("fill", wedgeColor("date", fieldFlags.date))
+          .style("fill", wedgeColor("date", queryChangeFlag.date))
           .append("title")
           .text(function (d) {
             return query.datefrom + " to " + query.dateto;
@@ -294,16 +300,16 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         /********************************************************************************************************
          * Icons
          ********************************************************************************************************/
-        if (fieldFlags.key == 2) {
+        if (queryChangeFlag.key == 2) {
           keyIcon();
         }
-        if (fieldFlags.type == 2) {
+        if (queryChangeFlag.type == 2) {
           typeIcon();
         }
-        if (fieldFlags.size == 2) {
+        if (queryChangeFlag.size == 2) {
           sizeIcon();
         }
-        if (fieldFlags.date == 2) {
+        if (queryChangeFlag.date == 2) {
           dateIcon();
         }
 
@@ -380,7 +386,6 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         pointCoordinate: new Array(),
         index: 0,
         linkCoordinates: new Array(),
-
 
 
         /*
@@ -470,7 +475,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
             c["x"] = parseFloat(d3.select(this).attr("x"));
             c["y"] = parseFloat(d3.select(this).attr("y"));
             temporalAxis.linkCoordinates.push(c);
-             console.log("store coordinate:", c);
+            console.log("store coordinate:", c);
             var query = queryGraph.getQuery(d3.select(this).attr("index"));
             selectedQueryFactory.addSelectedQuery(query);
           });
@@ -509,7 +514,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
         points.sort(function (a, b) {
           if (a["x"] < b["x"]) {
             return -1;
-          } else if(a["x"] > b["x"]) {
+          } else if (a["x"] > b["x"]) {
             return 1;
           } else {
             return 0;
@@ -554,7 +559,7 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
 
         console.log(lineData);
 
-        link.offY +=  link.offset;
+        link.offY += link.offset;
 
         var lineFunction = d3.svg.line()
           .x(function (d) {
@@ -585,11 +590,17 @@ enterpriseSearchApp.directive('queryprovis', ["$compile", "$window", "$rootScope
       /********************************************************************************************************
        * Handle the new query event
        ********************************************************************************************************/
-      $scope.$on('event:newquery-received', function (event, args) {
-        var newquery = args;
-        console.log("event:newquery-received: ", newquery, element[0], $rootScope.queryGraphCoordinates);
-        processQuery(newquery, element[0], $rootScope.queryGraphCoordinates);
+      $scope.$on('event:searchquery-received', function (event, args) {
 
+        var newquery = args;
+
+        console.log("event:searchquery-received...",
+          "\nsearchquery: ", newquery,
+          "\nelement[0]: ", element[0],
+          "\n$rootScope.queryGraphCoordinates: ", $rootScope.queryGraphCoordinates,
+          "\n");
+
+        processQuery(newquery, element[0], $rootScope.queryGraphCoordinates);
       });
 
     }; //link

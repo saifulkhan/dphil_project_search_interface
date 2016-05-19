@@ -17,13 +17,13 @@ enterpriseSearchApp.service('DataService', ["$rootScope", function ($rootScope) 
   this.graphData = [
     {
       session: 1,
-      user: "Charlotte",
+      user: "James",
       children: [
         {id: 10, time: "2015-02-12 09:27:40", adjList: [{id: 21, w: 0.5}, {id: 21, w: 0.8}]},
         {id: 11, time: "2015-02-12 09:31:40", adjList: [{id: 21, w: 0.5}, {id: 202, w: 0.8}]},
         {id: 12, time: "2015-02-12 09:40:32", adjList: [{id: 45, w: 0.4}]},
         {id: 13, time: "2015-02-12 09:50:00", adjList: [{id: 32, w: 0.4}]},
-        {id: 14, time: "2015-02-12 09:58:40", adjList: [{id: 23, w: 0.01}, {id: 43, w: 0.69}, {id: 301, w:.6}]},
+        {id: 14, time: "2015-02-12 09:58:40", adjList: [{id: 23, w: 0.01}, {id: 43, w: 0.69}, {id: 301, w: .6}]},
         {id: 15, time: "2015-02-12 10:15:04", adjList: [{id: 10000009, w: 0.4}, {id: 32, w: 0.01}]},
         {id: 16, time: "2015-02-12 10:18:04", adjList: [{id: 43, w: 0.01}, {id: 40, w: 0.69}, {id: 34, w: 0.4}]},
         {id: 17, time: "2015-02-12 10:20:40", adjList: [{id: 21, w: 0.5}, {id: 201, w: 0.8}]},
@@ -88,7 +88,7 @@ enterpriseSearchApp.service('DataService', ["$rootScope", function ($rootScope) 
     },
     {
       session: 2,
-      user: "Julie",
+      user: "Saiful",
       children: [
         {id: 20, time: "2015-02-16 08:55:00", adjList: []},
         {id: 21, time: "2015-02-16 09:10:00", adjList: []},
@@ -150,8 +150,8 @@ enterpriseSearchApp.service('DataService', ["$rootScope", function ($rootScope) 
       ]
     },
     {
-      session: 4,
-      user: "Jane",
+      session: 2,
+      user: "Emily",
       children: [
         {id: 40, time: "2015-02-17 11:03:00", adjList: [{id: 31, w: 0.01}]},
         {id: 41, time: "2015-02-17 11:15:00", adjList: [{id: 31, w: 0.01}, {id: 10004, w: 1}]},
@@ -163,8 +163,407 @@ enterpriseSearchApp.service('DataService', ["$rootScope", function ($rootScope) 
     }
   ];
 
-  this.getGraphData = function() {
-    return this.graphData;
+  this.graphDataSmall = [
+    {
+      session: 1,
+      user: "James",
+      children: [
+        {id: 10, time: "2015-04-16 10:00:00", adjList: [{id: 21, w: 0.8}]},
+        {id: 11, time: "2015-04-16 10:00:40", adjList: []},
+        {id: 12, time: "2015-04-16 10:01:32", adjList: []},
+        {id: 13, time: "2015-04-16 10:05:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 14, time: "2015-04-16 12:12:40", adjList: [{id: 23, w: 0.01}]},
+        {id: 15, time: "2015-04-16 12:15:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 16, time: "2015-04-16 12:18:04", adjList: [{id: 40, w: 0.69}, {id: 31, w: 0.4}]},
+        {id: 17, time: "2015-04-18 08:29:40", adjList: [{id: 21, w: 0.5}]},
+        {id: 10008, time: "2015-04-18 08:45:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 10009, time: "2015-04-18 09:06:40", adjList: [{id: 23, w: 0.01}]},
+        {id: 100001, time: "2015-04-18 09:13:04", adjList: [{id: 32, w: 0.01}]}
+      ]
+    },
+    {
+      session: 2,
+      user: "Saiful",
+      children: [
+        {id: 20, time: "2015-04-18 08:55:00", adjList: [{id: 37, w: 0.7}]},
+        {id: 21, time: "2015-04-18 09:10:00", adjList: []},
+        {id: 22, time: "2015-04-18 09:13:10", adjList: [{id: 10, w: 0.7}, {id: 36, w: 1}]},
+        {id: 23, time: "2015-04-18 09:22:00", adjList: [{id: 12, w: 1}]},
+        {id: 24, time: "2015-04-18 09:31:45", adjList: [{id: 32, w: 0.8}]}
+      ]
+    },
+    {
+      session: 3,
+      user: "Andy",
+      children: [
+        {id: 30, time: "2015-04-18 08:59:50", adjList: []},
+        {id: 31, time: "2015-04-18 09:01:00", adjList: [{id: 24, w: 0.1}, {id: 13, w: 0.3}]},
+        {id: 32, time: "2015-04-18 09:05:00", adjList: [{id: 11, w: 0.01}]},
+        {id: 36, time: "2015-04-18 09:16:50", adjList: []},
+        {id: 37, time: "2015-04-18 09:20:00", adjList: [{id: 24, w: 0.1}, {id: 13, w: 0.3}]},
+        {id: 38, time: "2015-04-18 09:21:00", adjList: [{id: 11, w: 1}]}
+
+      ]
+    },
+    {
+      session: 2,
+      user: "Emily",
+      children: [
+        {id: 40, time: "2015-04-18 09:03:00", adjList: [{id: 31, w: 0.01}]},
+        {id: 41, time: "2015-04-18 09:15:00", adjList: [{id: 37, w: 0.01}, {id: 17, w: 1}]}
+      ]
+    }
+  ];
+
+
+  /* 0 ****************************************************************************************************************/
+
+  this.graphDataSmall[0] = [
+    {
+      session: 1,
+      user: "James",
+      children: [
+        {id: 10, time: "2015-04-16 10:00:00", adjList: []},
+        {id: 11, time: "2015-04-16 10:00:40", adjList: []},
+        {id: 12, time: "2015-04-16 10:01:32", adjList: []},
+        {id: 13, time: "2015-04-16 10:05:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 14, time: "2015-04-16 12:12:40", adjList: []},
+        {id: 15, time: "2015-04-16 12:15:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 16, time: "2015-04-16 12:18:04", adjList: [{id: 40, w: 0.69}, {id: 31, w: 0.4}]},
+        {id: 17, time: "2015-04-18 08:29:40", adjList: []},
+        {id: 10008, time: "2015-04-18 08:45:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 10009, time: "2015-04-18 09:06:40", adjList: []},
+        {id: 100001, time: "2015-04-18 09:13:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 18, time: "2015-04-18 09:14:00", adjList: [{id: 30, w: 0.4}]}, // +
+        {id: 19, time: "2015-04-18 09:16:40", adjList: [{id: 37, w: 0.01}]}, // +
+        {id: 101, time: "2015-04-18 09:16:45", adjList: [{id: 40, w: 0.01}]} // +
+      ]
+    },
+
+    {
+      session: 2,
+      user: "Emily",
+      children: [
+        {id: 40, time: "2015-04-18 09:03:00", adjList: [{id: 31, w: 0.01}]},
+        {id: 41, time: "2015-04-18 09:15:00", adjList: [{id: 37, w: 0.01}, {id: 17, w: 1}]}
+      ]
+    },
+
+    {
+      session: 3,
+      user: "Andy",
+      children: [
+        {id: 30, time: "2015-04-18 08:59:50", adjList: []},
+        {id: 31, time: "2015-04-18 09:01:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 32, time: "2015-04-18 09:05:00", adjList: [{id: 11, w: 0.01}]},
+        {id: 36, time: "2015-04-18 09:16:50", adjList: [],
+          query:"building material | docx, pdf, xlsx | 100KB-500MB"},
+        {id: 37, time: "2015-04-18 09:20:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 38, time: "2015-04-18 09:21:00", adjList: [{id: 11, w: 1}]}
+
+      ]
+    }
+
+  ];
+
+
+  /* 1 ****************************************************************************************************************/
+  this.graphDataSmall[1] = [
+    {
+      session: 1,
+      user: "James",
+      children: [
+        {id: 10, time: "2015-04-16 10:00:00", adjList: []},
+        {id: 11, time: "2015-04-16 10:00:40", adjList: []},
+        {id: 12, time: "2015-04-16 10:01:32", adjList: []},
+        {id: 13, time: "2015-04-16 10:05:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 14, time: "2015-04-16 12:12:40", adjList: []},
+        {id: 15, time: "2015-04-16 12:15:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 16, time: "2015-04-16 12:18:04", adjList: [{id: 40, w: 0.69}, {id: 31, w: 0.4}]},
+        {id: 17, time: "2015-04-18 08:29:40", adjList: []},
+        {id: 10008, time: "2015-04-18 08:45:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 10009, time: "2015-04-18 09:06:40", adjList: []},
+        {id: 100001, time: "2015-04-18 09:13:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 18, time: "2015-04-18 09:14:00", adjList: [{id: 30, w: 0.4}]}, // +
+        {id: 19, time: "2015-04-18 09:16:40", adjList: [{id: 37, w: 0.01}]}, // +
+        {id: 101, time: "2015-04-18 09:16:45", adjList: [{id: 40, w: 0.01}]} // +
+      ]
+    },
+    {
+      session: 2,
+      user: "Emily",
+      children: [
+        {id: 40, time: "2015-04-18 09:03:00", adjList: [{id: 31, w: 0.01}]},
+        {id: 41, time: "2015-04-18 09:15:00", adjList: [{id: 37, w: 0.01}, {id: 17, w: 1}]}
+      ]
+    },
+
+    {
+      session: 3,
+      user: "Andy",
+      children: [
+        {id: 30, time: "2015-04-18 08:59:50", adjList: []},
+        {id: 31, time: "2015-04-18 09:01:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 32, time: "2015-04-18 09:05:00", adjList: [{id: 11, w: 0.01}]},
+        {id: 36, time: "2015-04-18 09:16:50", adjList: [],
+          query:"building material | docx, pdf, xlsx | 100KB-500MB"},
+        {id: 37, time: "2015-04-18 09:20:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 38, time: "2015-04-18 09:21:00", adjList: [{id: 11, w: 1}]}
+
+      ]
+    },
+
+    {
+      session: 4,
+      user: "Saiful",
+      children: [
+        {id: 20, time: "2015-04-20 08:55:00", adjList: [{id: 37, w: 0.7}]}
+      ]
+    }
+  ];
+
+
+  /* 2 ****************************************************************************************************************/
+
+  this.graphDataSmall[2] = [
+    {
+      session: 1,
+      user: "James",
+      children: [
+        {id: 10, time: "2015-04-16 10:00:00", adjList: [{id: 21, w: 0.8}]},
+        {id: 11, time: "2015-04-16 10:00:40", adjList: []},
+        {id: 12, time: "2015-04-16 10:01:32", adjList: []},
+        {id: 13, time: "2015-04-16 10:05:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 14, time: "2015-04-16 12:12:40", adjList: []},
+        {id: 15, time: "2015-04-16 12:15:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 16, time: "2015-04-16 12:18:04", adjList: [{id: 40, w: 0.69}, {id: 31, w: 0.4}]},
+        {id: 17, time: "2015-04-18 08:29:40", adjList: [{id: 21, w: 0.5}]},
+        {id: 10008, time: "2015-04-18 08:45:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 10009, time: "2015-04-18 09:06:40", adjList: []},
+        {id: 100001, time: "2015-04-18 09:13:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 18, time: "2015-04-18 09:14:00", adjList: [{id: 30, w: 0.4}]}, // +
+        {id: 19, time: "2015-04-18 09:16:40", adjList: [{id: 37, w: 0.01}]}, // +
+        {id: 101, time: "2015-04-18 09:16:45", adjList: [{id: 40, w: 0.01}]} // +
+      ]
+    },
+    {
+      session: 2,
+      user: "Emily",
+      children: [
+        {id: 40, time: "2015-04-18 09:03:00", adjList: [{id: 31, w: 0.01}]},
+        {id: 41, time: "2015-04-18 09:15:00", adjList: [{id: 37, w: 0.01}, {id: 17, w: 1}]}
+      ]
+    },
+
+    {
+      session: 3,
+      user: "Andy",
+      children: [
+        {id: 30, time: "2015-04-18 08:59:50", adjList: []},
+        {id: 31, time: "2015-04-18 09:01:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 32, time: "2015-04-18 09:05:00", adjList: [{id: 11, w: 0.01}]},
+        {id: 36, time: "2015-04-18 09:16:50", adjList: [],
+          query:"building material | docx, pdf, xlsx | 100KB-500MB"},
+        {id: 37, time: "2015-04-18 09:20:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 38, time: "2015-04-18 09:21:00", adjList: [{id: 11, w: 1}]}
+
+      ]
+    },
+
+    {
+      session: 4,
+      user: "Saiful",
+      children: [
+        {id: 20, time: "2015-04-20 08:55:00", adjList: [{id: 37, w: 0.7}]},
+        {id: 21, time: "2015-04-20 09:06:00", adjList: [{id: 36, w: 1}]}
+      ]
+    }
+
+  ];
+
+
+  /* 3 ****************************************************************************************************************/
+
+  this.graphDataSmall[3] = [
+    {
+      session: 1,
+      user: "James",
+      children: [
+        {id: 10, time: "2015-04-16 10:00:00", adjList: [{id: 21, w: 0.8}]},
+        {id: 11, time: "2015-04-16 10:00:40", adjList: []},
+        {id: 12, time: "2015-04-16 10:01:32", adjList: []},
+        {id: 13, time: "2015-04-16 10:05:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 14, time: "2015-04-16 12:12:40", adjList: []},
+        {id: 15, time: "2015-04-16 12:15:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 16, time: "2015-04-16 12:18:04", adjList: [{id: 40, w: 0.69}, {id: 31, w: 0.4}]},
+        {id: 17, time: "2015-04-18 08:29:40", adjList: [{id: 21, w: 0.5}]},
+        {id: 10008, time: "2015-04-18 08:45:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 10009, time: "2015-04-18 09:06:40", adjList: []},
+        {id: 100001, time: "2015-04-18 09:13:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 18, time: "2015-04-18 09:14:00", adjList: [{id: 30, w: 0.4}]}, // +
+        {id: 19, time: "2015-04-18 09:16:40", adjList: [{id: 37, w: 0.01}]}, // +
+        {id: 101, time: "2015-04-18 09:16:45", adjList: [{id: 40, w: 0.01}]} // +
+      ]
+    },
+
+    {
+      session: 2,
+      user: "Emily",
+      children: [
+        {id: 40, time: "2015-04-18 09:03:00", adjList: [{id: 31, w: 0.01}]},
+        {id: 41, time: "2015-04-18 09:15:00", adjList: [{id: 37, w: 0.01}, {id: 17, w: 1}]}
+      ]
+    },
+
+    {
+      session: 3,
+      user: "Andy",
+      children: [
+        {id: 30, time: "2015-04-18 08:59:50", adjList: []},
+        {id: 31, time: "2015-04-18 09:01:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 32, time: "2015-04-18 09:05:00", adjList: [{id: 11, w: 0.01}]},
+        {id: 36, time: "2015-04-18 09:16:50", adjList: [],
+          query:"building material | docx, pdf, xlsx | 100KB-500MB"},
+        {id: 37, time: "2015-04-18 09:20:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 38, time: "2015-04-18 09:21:00", adjList: [{id: 11, w: 1}]}
+
+      ]
+    },
+
+    {
+      session: 4,
+      user: "Saiful",
+      children: [
+        {id: 20, time: "2015-04-20 08:55:00", adjList: [{id: 37, w: 0.7}]},
+        {id: 21, time: "2015-04-20 09:06:00", adjList: [{id: 36, w: 1}]},
+        {id: 22, time: "2015-04-20 09:08:10", adjList: [{id: 10, w: 0.7}]}
+      ]
+    }
+  ];
+
+  /* 4 ****************************************************************************************************************/
+  this.graphDataSmall[4] = [
+    {
+      session: 1,
+      user: "James",
+      children: [
+        {id: 10, time: "2015-04-16 10:00:00", adjList: [{id: 21, w: 0.8}]},
+        {id: 11, time: "2015-04-16 10:00:40", adjList: []},
+        {id: 12, time: "2015-04-16 10:01:32", adjList: []},
+        {id: 13, time: "2015-04-16 10:05:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 14, time: "2015-04-16 12:12:40", adjList: [{id: 23, w: 0.01}]},
+        {id: 15, time: "2015-04-16 12:15:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 16, time: "2015-04-16 12:18:04", adjList: [{id: 40, w: 0.69}, {id: 31, w: 0.4}]},
+        {id: 17, time: "2015-04-18 08:29:40", adjList: [{id: 21, w: 0.5}]},
+        {id: 10008, time: "2015-04-18 08:45:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 10009, time: "2015-04-18 09:06:40", adjList: [{id: 23, w: 0.01}]},
+        {id: 100001, time: "2015-04-18 09:13:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 18, time: "2015-04-18 09:14:00", adjList: [{id: 30, w: 0.4}]}, // +
+        {id: 19, time: "2015-04-18 09:16:40", adjList: [{id: 37, w: 0.01}]}, // +
+        {id: 101, time: "2015-04-18 09:16:45", adjList: [{id: 40, w: 0.01}]} // +
+      ]
+    },
+    {
+      session: 2,
+      user: "Emily",
+      children: [
+        {id: 40, time: "2015-04-18 09:03:00", adjList: [{id: 31, w: 0.01}]},
+        {id: 41, time: "2015-04-18 09:15:00", adjList: [{id: 37, w: 0.01}, {id: 17, w: 1}]}
+      ]
+    },
+
+    {
+      session: 3,
+      user: "Andy",
+      children: [
+        {id: 30, time: "2015-04-18 08:59:50", adjList: []},
+        {id: 31, time: "2015-04-18 09:01:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 32, time: "2015-04-18 09:05:00", adjList: [{id: 11, w: 0.01}]},
+        {id: 36, time: "2015-04-18 09:16:50", adjList: [],
+          query:"building material | docx, pdf, xlsx | 100KB-500MB"},
+        {id: 37, time: "2015-04-18 09:20:00", adjList: [{id: 13, w: 0.3}]},
+        {id: 38, time: "2015-04-18 09:21:00", adjList: [{id: 11, w: 1}]}
+
+      ]
+    },
+
+    {
+      session: 4,
+      user: "Saiful",
+      children: [
+        {id: 20, time: "2015-04-20 08:55:00", adjList: [{id: 37, w: 0.7}]},
+        {id: 21, time: "2015-04-20 09:06:00", adjList: [{id: 36, w: 1}]},
+        {id: 22, time: "2015-04-20 09:08:10", adjList: [{id: 10, w: 0.7}]},
+        {id: 23, time: "2015-04-20 09:12:00", adjList: [{id: 12, w: 0.8}]}
+      ]
+    }
+  ];
+
+
+  /* 5 ****************************************************************************************************************/
+  this.graphDataSmall[5] = [
+    {
+      session: 1,
+      user: "James",
+      children: [
+        {id: 10, time: "2015-04-16 10:00:00", adjList: [{id: 21, w: 0.8}]},
+        {id: 11, time: "2015-04-16 10:00:40", adjList: []},
+        {id: 12, time: "2015-04-16 10:01:32", adjList: []},
+        {id: 13, time: "2015-04-16 10:05:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 14, time: "2015-04-16 12:12:40", adjList: [{id: 23, w: 0.01}]},
+        {id: 15, time: "2015-04-16 12:15:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 16, time: "2015-04-16 12:18:04", adjList: [{id: 40, w: 0.69}, {id: 31, w: 0.4}]},
+        {id: 17, time: "2015-04-18 08:29:40", adjList: [{id: 21, w: 0.5}]},
+        {id: 10008, time: "2015-04-18 08:45:00", adjList: [{id: 32, w: 0.4}]},
+        {id: 10009, time: "2015-04-18 09:06:40", adjList: [{id: 23, w: 0.01}]},
+        {id: 100001, time: "2015-04-18 09:13:04", adjList: [{id: 32, w: 0.01}]},
+        {id: 18, time: "2015-04-18 09:14:00", adjList: [{id: 30, w: 0.4}]}, // +
+        {id: 19, time: "2015-04-18 09:16:40", adjList: [{id: 37, w: 0.01}]}, // +
+        {id: 101, time: "2015-04-18 09:16:45", adjList: [{id: 40, w: 0.01}]} // +
+      ]
+    },
+    {
+      session: 2,
+      user: "Emily",
+      children: [
+        {id: 40, time: "2015-04-18 09:03:00", adjList: [{id: 31, w: 0.01}]},
+        {id: 41, time: "2015-04-18 09:15:00", adjList: [{id: 37, w: 0.01}, {id: 17, w: 1}]}
+      ]
+    },
+
+    {
+      session: 3,
+      user: "Andy",
+      children: [
+        {id: 30, time: "2015-04-18 08:59:50", adjList: []},
+        {id: 31, time: "2015-04-18 09:01:00", adjList: [{id: 24, w: 0.1}, {id: 13, w: 0.3}]},
+        {id: 32, time: "2015-04-18 09:05:00", adjList: [{id: 11, w: 0.01}]},
+        {id: 36, time: "2015-04-18 09:16:50", adjList: [],
+          query:"building material | docx, pdf, xlsx | 100KB-500MB"},
+        {id: 37, time: "2015-04-18 09:20:00", adjList: [{id: 24, w: 0.1}, {id: 13, w: 0.3}]},
+        {id: 38, time: "2015-04-18 09:21:00", adjList: [{id: 11, w: 1}]}
+
+      ]
+    },
+
+    {
+      session: 4,
+      user: "Saiful",
+      children: [
+        {id: 20, time: "2015-04-20 08:55:00", adjList: [{id: 37, w: 0.7}]},
+        {id: 21, time: "2015-04-20 09:00:00", adjList: [{id: 36, w: 1}]},
+        {id: 22, time: "2015-04-20 09:06:10", adjList: [{id: 10, w: 0.7}]},
+        {id: 23, time: "2015-04-20 09:08:00", adjList: [{id: 12, w: 0.8}]},
+        {id: 24, time: "2015-04-20 09:12:45", adjList: [{id: 32, w: 0.3}]}
+      ]
+    }
+
+  ];
+
+
+
+  this.getGraphData = function (i) {
+    return this.graphDataSmall[i];
   }
 
 }]);

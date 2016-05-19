@@ -10,7 +10,8 @@
             <div class="col-lg-12">
               <div class="input-group">
                 <div class="input-group-addon">Name</div>
-                <input type="text" class="form-control input-md" placeholder="File name " ng-model="query.key" value="">
+                <input type="text" class="form-control input-md" placeholder="File name "
+                       ng-model="query.key" value="">
               </div>
             </div>
           </div>
@@ -19,7 +20,8 @@
             <div class="col-lg-12">
               <div class="input-group">
                 <div class="input-group-addon">Type&nbsp;</div>
-                <input type="text" class="form-control input-md" ng-model="query.type" placeholder="File type" value="">
+                <input type="text" class="form-control input-md" ng-model="query.type"
+                       placeholder="File type" value="">
               </div>
             </div>
           </div>
@@ -28,7 +30,8 @@
             <div class="col-lg-6">
               <div class="input-group">
                 <div class="input-group-addon">Size&nbsp;&nbsp;</div>
-                <input type="text" class="form-control input-md" ng-model="query.sizefrom" placeholder="from" value="">
+                <input type="text" class="form-control input-md" ng-model="query.sizefrom"
+                       placeholder="from" value="">
 
                 <div class="input-group-addon" style="width:10%">
                   <select ng-model="query.sizefrom_unit" class="sone">
@@ -43,7 +46,8 @@
             </div>
             <div class="col-lg-6">
               <div class="input-group">
-                <input type="text" class="form-control input-md" ng-model="query.sizeto" placeholder="to" value="">
+                <input type="text" class="form-control input-md" ng-model="query.sizeto"
+                       placeholder="to" value="">
 
                 <div class="input-group-addon">
                   <select ng-model="query.sizeto_unit" class="sone">
@@ -61,8 +65,10 @@
             <div class="col-lg-6">
               <div class="input-group">
                 <div class="input-group-addon">Date&nbsp;</div>
-                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="query.datefrom"
-                       is-open="opened" max-date="todayDate" datepicker-options="dateOptions" close-text="Close"
+                <input type="text" class="form-control" datepicker-popup="{{format}}"
+                       ng-model="query.datefrom"
+                       is-open="opened" max-date="todayDate" datepicker-options="dateOptions"
+                       close-text="Close"
                        placeholder="from" value="" ng-change="datefromChange()">
             <span class="input-group-btn">
             <button type="button" class="form-control btn btn-default" ng-click="open($event)"><i
@@ -73,8 +79,10 @@
 
             <div class="col-lg-6">
               <div class="input-group">
-                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="query.dateto"
-                       is-open="opened2" max-date="todayDate" datepicker-options="dateOptions" close-text="Close"
+                <input type="text" class="form-control" datepicker-popup="{{format}}"
+                       ng-model="query.dateto"
+                       is-open="opened2" max-date="todayDate" datepicker-options="dateOptions"
+                       close-text="Close"
                        placeholder="to" value="" ng-change="datetoChange()"/>
                <span class="input-group-btn">
                <button type="button" class="form-control btn btn-default" ng-click="open2($event)"><i
@@ -97,7 +105,7 @@
         </form>
       </div>
 
-      <hr class="style-two">
+      <!--hr class="style-two"-->
 
       <br/>
       <br/>
@@ -133,11 +141,13 @@
             <tr ng-class-odd="'odd'" ng-class-even="'even'" ng-repeat="doc in searchresult">
               <div class="row">
                 <td class="col-lg-1">
-                  <button type="button" class="btn btn-default btn-md" ng-hide="doc.select" popover="Select it"
+                  <button type="button" class="btn btn-default btn-md" ng-hide="doc.select"
+                          popover="Select it"
                           ng-click="selectDocument($index)">
                     <span class="glyphicon glyphicon-ok-circle"> </span>
                   </button>
-                  <button type="button" class="btn btn-default btn-md" ng-show="doc.select" popover="Select it"
+                  <button type="button" class="btn btn-default btn-md" ng-show="doc.select"
+                          popover="Select it"
                           ng-click="deselectDocument($index)">
                     <span class="glyphicon glyphicon-ok-circle selection_glyph"> </span>
                   </button>
@@ -157,15 +167,6 @@
 
         <div>
           <script src="app/assets/lib/sbar.js"></script>
-          <script>
-            // $scope.setCoordinates();
-            /*$('#tableview').slimscroll({
-             color: '#00f',
-             size: '10px',
-             // width: '150px',
-             height: '1000px'
-             });*/
-          </script>
         </div>
 
       </div>
@@ -178,7 +179,8 @@
                   ng-click="viewDialog('view_records')" ng-disabled="!resultPortfolio.length">
             View
           </button>
-          <button type="button" class="btn btn-primary" popover-trigger="mouseenter" ng-click="saveResultPortfolio()"
+          <button type="button" class="btn btn-primary" popover-trigger="mouseenter"
+                  ng-click="saveResultPortfolio()"
                   ng-disabled="!resultPortfolio.length || disablePortfolioButton">
             Save
           </button>
@@ -191,55 +193,39 @@
   </div>
   <!-- END topmost row (search form, result table) -->
 
-  <div id="fcgraphView" class="row">
-    <hr class="style-four">
-    <div class="col-md-12 col-l-12">
-      <!--div id="fcgraph"></--div-->
+  <!-- SPG: Graphs -->
+  <div class="row">
+    <hr class="style-two">
+
+    <div class="col-md-10 col-lg-10">
       <fcgraph></fcgraph>
     </div>
+
   </div>
+  <!-- SPG Graphs END-->
 
+  <!-- SPG: Glyph -->
   <div id="radialgraphView" class="row">
-    <hr class="style-four">
+    <hr class="style-two">
 
-    <!-- Query Provenance Visualisation -->
-    <div class="row">
+    <div class="row vdivide">
 
-      <!--
-      <div class="col-md-12 col-lg-12">
-
-        <div class="col-md-2 col-lg-2">
-          <radialgraph></radialgraph>
-        </div>
-
-        <div class="col-md-10 col-lg-10">
-          <div class="row">
-            <queryprovis></queryprovis>
-          </div>
-          <div class="row">
-            <resultprovis></resultprovis>
-          </div>
-        </div>
+    <div id="fcgraphView" class="col-md-2 col-lg-2">
+      <radialgraph></radialgraph>
+    </div>
+    <div id="fcgraphView" class="col-md-10 col-lg-10">
+      <div class="row">
+        <queryprovis></queryprovis>
       </div>
-      -->
-
-      <div class="modal-body">
-        <div class="first-column">
-          <radialgraph></radialgraph>
-        </div>
-        <div class="second-column">
-          <div class="row">
-            <queryprovis></queryprovis>
-          </div>
-          <div class="row">
-            <resultprovis></resultprovis>
-          </div>
-        </div>
+      <div class="row">
+        <resultprovis></resultprovis>
       </div>
-
+    </div>
 
     </div>
+
   </div>
+  <!-- SPG: Glyph END -->
 
 
   <!-- The view and Save option for selected query for reformulation -->
