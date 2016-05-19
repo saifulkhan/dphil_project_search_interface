@@ -44,7 +44,7 @@ enterpriseSearchApp.directive('fcgraph', ["$compile", "$window", "$rootScope", "
 
       var MIN_WEIGHT = 0.1;
 
-      var DOT_SIZE = 8;  // Diameter
+      var DOT_SIZE = 10;  // Diameter
       var MIN_GAP_X = DOT_SIZE;
       var MIN_GAP_Y = DOT_SIZE;
 
@@ -62,7 +62,8 @@ enterpriseSearchApp.directive('fcgraph', ["$compile", "$window", "$rootScope", "
       var AXIS_POS_Y = Y_OFFSET * 2;
       var AXIS_OFFSET = 10;
 
-      var TIME_LEGEND_FONT = 8;
+      var TIME_LEGEND_FONT = 10;
+      var FONT_LABEL = 12;
 
       var nodeMap = {};
 
@@ -409,7 +410,7 @@ enterpriseSearchApp.directive('fcgraph', ["$compile", "$window", "$rootScope", "
 
         rectGroup.append("text")
           .attr("class", "text")
-          .style("font-size", "10px")
+          .style("font-size", FONT_LABEL + "px")
           .attr("x", function (d) {
             return d.x1 + (TIME_BREAK_WIDTH) / 2;
           })
@@ -438,7 +439,7 @@ enterpriseSearchApp.directive('fcgraph', ["$compile", "$window", "$rootScope", "
           //.offset([0, 0])
           .html(function (d) {
             return "<center>"
-              + "<font size='1px'>"
+              + "<font size='2px'>"
               + "<span style='color:white' >"
               //+ d.w
               + "<span style='color:#ff7f0e'> <br> <i>Andy's</i> [building material | docx, pdf, xlsx, dwg | 100KB-500MB] </br>"
@@ -466,7 +467,7 @@ enterpriseSearchApp.directive('fcgraph', ["$compile", "$window", "$rootScope", "
           .attr("d", diagonal)
           .attr("class", "link")
           .attr("stroke", function (d) {
-            console.log("Weight: ", d.w);
+            //console.log("Weight: ", d.w);
             return edgeColor(d["w"]);
           })
           .on('mouseover', tipForLinks.show)
@@ -500,7 +501,8 @@ enterpriseSearchApp.directive('fcgraph', ["$compile", "$window", "$rootScope", "
           //.offset([0, 0])
           .html(function (d) {
             //console.log("d:", d);
-            var info = d.id;
+            var info = "[" + d.id +
+              "]";
             if (d.query) {
               info += "\n" + d.query;
             }

@@ -123,13 +123,22 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
    * Treemap
    ****************************************************************************************************************/
 
+  $scope.$on('$viewContentLoaded', function () {
+
+    $scope.provis_window = $window.open("/searchspace", "Search Space: Treemap & Glyph", "height=850,width=1500");
+  });
 
 
-   $scope.$on('$viewContentLoaded', function () {
-   //alert("Page loaded:");
+  /***************************************************************************************************************
+   * This function is invoked on page unloading.
+   * It is used to close the child window, searchspace before unloading.
+   ****************************************************************************************************************/
 
-   $scope.provis_window = $window.open("/searchspace", "Search Space: Treemap & Glyph", "height=850,width=1500");
-   });
+  $window.onunload = function (event) {
+    $scope.provis_window.close();
+
+    return 'Thank you';
+  }
 
 
   /***************************************************************************************************************
@@ -152,26 +161,16 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
   }
 
 
-  /***************************************************************************************************************
-   * This function is invoked on page unloading.
-   * It is used to close the child window, searchspace before unloading.
-   ****************************************************************************************************************/
-
-  $window.onunload = function (event) {
-    $scope.provis_window.close();
-
-    return 'Thank you';
-  }
 
 
   /***************************************************************************************************************
    * searchspace page page related
    ****************************************************************************************************************/
 
+
   $scope.searchspacePage = function () {
     $window.open("/searchspace", "_blank");
   }
-
 
   /*****************************************************************************************************************
    * Search http request

@@ -26,9 +26,9 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
         console.log("function drawRadialGraph:");
 
         var MIN_WEIGHT = 0.1;
-        var DOT_SIZE = 8;
+        var DOT_SIZE = 10;
         var GAP = 0.02 * Math.PI;
-        var LABEL = 6;
+        var FONT_USER = 12;
 
         /***********************************************************************
          * SVG
@@ -42,7 +42,7 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
           x = 0,
           y = 0;
 
-        var r = (width - 3 * DOT_SIZE - 2 * LABEL) / 2; // TODO:
+        var r = (width - 3 * DOT_SIZE - 2 * FONT_USER) / 2; // TODO:
 
         console.log("drawRadialGraph: dimension:", width, height);
 
@@ -298,12 +298,12 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
 
         console.log("legend", legend);
 
-        var legendGroup = svgGroup.selectAll(".legend")
+        var svgOuterLabel = svgGroup.selectAll(".legend")
           .data(legend)
           .enter()
           .append("g");
 
-        var r1 = r + LABEL * 2;
+        var r1 = r + FONT_USER * 2;
 
 
         // legend-arc
@@ -311,22 +311,31 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
         // TODO This arrow is not working
         // build the arrow.
         // http://bl.ocks.org/d3noob/5141278
-        legendGroup.append("defs").selectAll("marker")
+
+        var markerWidth = 6,
+          markerHeight = 6,
+          cRadius = 0, // play with the cRadius value
+          refX = cRadius + (markerWidth * 2),
+          refY = -Math.sqrt(cRadius);
+
+
+        svgOuterLabel.append("defs").selectAll("marker")
           .data(["xx"])      // Different link/path types can be defined here
           .enter().append("marker")    // This section adds in the arrows
           .attr("id", function (d) {
-            console.log("edgeArrow ... d=" + d);
+            //console.log("edgeArrow ... d=" + d);
             return d;
           })
           .attr("viewBox", "0 -5 10 10")
-          .attr("refX", 37)           // adjust the position
-          .attr("refY", -2.5)
+          .attr("refX", refX)           // adjust the position
+          .attr("refY", refY)
           .attr("fill", "MediumSeaGreen")
-          .attr("markerWidth", 6)
-          .attr("markerHeight", 6)
+          .attr("markerWidth", markerWidth)
+          .attr("markerHeight", markerHeight)
           .attr("orient", "auto")
           .append("svg:path")
           .attr("d", "M0,-5L10,0L0,5");
+
 
 
         var arcs = d3.svg.arc()
@@ -342,15 +351,16 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
             });
 
         // Draw the arcs
-        legendGroup.append("path")
+        svgOuterLabel.append("path")
           .attr("d", arcs)
-          .attr("class", "ticks")
+          .attr("class", "ticks")         // TODO: outer arcs are not shown
           .attr("id", function (d, i) {
             return "id" + i;
           });
 
-        // Add the arrow
-        legendGroup.attr("marker-end", "url(" + location.href + "#" + "xx" + ")");
+        // Add the arrow // TODO: outer arcs arrows alo are not shown
+        svgOuterLabel.attr("marker-start", "url(" + location.href + "#" + "xx" + ")");
+
 
 
         //User name labels
@@ -358,12 +368,12 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
         //http://stackoverflow.com/questions/13202407/aligning-text-inside-circular-arc-d3js
 
 
-        var textLegendGroup = legendGroup.append("g")
+        var textLegendGroup = svgOuterLabel.append("g")
           .attr("id", "thing");
 
         textLegendGroup.append("text")
           .attr("class", "text")
-          .style("font-size", LABEL + "px")
+          .style("font-size", FONT_USER + "px")
           .attr("dy", function (d, i) {
             return 15;  // TODO - radius position
           })
@@ -378,6 +388,7 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
           .text(function (d) {
             return d.user;
           });
+
 
 
         // END of legend-arc and label
@@ -403,7 +414,7 @@ enterpriseSearchApp.directive('radialgraph', ["$compile", "$window", "$rootScope
           .data(["x"])
           .enter().append("svg:marker")
           .attr("id", function (d) {
-            console.log("edgeArrow ... d=" + d);
+            //console.log("edgeArrow ... d=" + d);
             return d;
           })
           .attr("viewBox", "0 -5 10 10")
