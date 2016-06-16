@@ -23,7 +23,7 @@ angular.module('enterpriseSearchApp')
       $scope.$on('event:treemapbuild-received', function (name, args) {
 
         console.log("Client: treemapbuild data received!, call updateTreemapBuild. ", args);
-        updateTreemapBuild(args, element[0], $rootScope.treemapCoordinates);
+        updateTreemapBuild(args, element[0], $rootScope.treemapCoordinates, $rootScope.zoomTreemap);
       });
 
 

@@ -16,20 +16,20 @@ if (!testWithoutQP) {
  * send treemap the coordinates and receive the json data in 'data'
  *************************************************************************************************************/
 
-exports.treemapBuild = function (req, res) {
-  console.log("--treemapBuild, req:", req.body);
+exports.buildTreemap = function (req, res) {
+  console.log("--buildTreemap, req:", req.body);
 
   if (testWithoutQP) {
 
-    var treemapBuild = fs.readFileSync('test_data/treemapBuild.json', 'utf8');
+    var treemapBuild = fs.readFileSync('test_data/buildTreemap.json', 'utf8');
     res.end(treemapBuild);
     //res.writeHead(200, { 'Content-Type': 'application/json' });
     //res.json(JSON.parse(treemapBuild));
 
   } else {
 
-    obj.treemapBuild(req.body.x, req.body.y, req.body.w, req.body.h, function (data) {
-      console.log("Server returning treemapBuild data.");
+    obj.buildTreemap(req.body.x, req.body.y, req.body.w, req.body.h, function (data) {
+      console.log("Server returning buildTreemap data.");
       res.end(data);
       //res.json(data);
       //res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -43,15 +43,15 @@ exports.treemapBuild = function (req, res) {
  * Request for treemap data for depth 'k'
  *************************************************************************************************************/
 
-exports.treemapData = function (req, res) {
-  console.log('--treemapData--');
+exports.zoomTreemap = function (req, res) {
 
-  /*
-   obj.treemapData(req.body.depth, function(data) {
-   console.log("Server returning treemapData for a depth.");
-   res.json(data);
-   });
-   */
+  console.log("--zoomTreemap-- req:", req.body);
+
+  obj.zoomTreemap(req.body.path, function (data) {
+    console.log("Server returning zoomTreemap data.");
+    res.end(data);
+  });
+
 }
 
 
@@ -92,7 +92,6 @@ exports.feedback = function (req, res) {
   });
 
 }
-
 
 
 /*************************************************************************************************************

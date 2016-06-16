@@ -1,4 +1,4 @@
-var fsglyphInit = {
+var init = {
 
   // arguments received
   treemapCoordinates: {},
@@ -6,11 +6,19 @@ var fsglyphInit = {
   data: "",
 
   // Glyph
-  glyphSize: 40,
-  dotSize: 3,
-  dateRingSize: 34,
-  dateRingWidth: 3,
-  spiralSize: 27,
+  GLYPH_SIZE: 50,
+  PI_SIZE: 25,
+  DOT_SIZE: 3,
+  DATE_RING_SIZE: 40,
+  DATE_RING_WIDTH: 3,
+  SPIRAL_SIZE: 30,
+
+  GLYPH_SIZE_L: 75,
+  PI_SIZE_L: 50,
+  DOT_SIZE_L: 5,
+  DATE_RING_SIZE_L: 60,
+  DATE_RING_WIDTH_L: 4,
+  SPIRAL_SIZE_L: 45,
 
   // Data
   resultArray: [],
@@ -52,7 +60,7 @@ var fsglyphInit = {
     return this.resultArray[this.resultArray.length - 1];
   }
 
-}; // fsglyphInit
+}; // init
 
 
 /*********************************************************************************************************************
@@ -63,28 +71,28 @@ function updateFSGlyph(data, selector, coordinate) {
 
   console.log("updateFSGlyph", data, selector, coordinate);
 
-  fsglyphInit.data = data;
-  fsglyphInit.treemapCoordinates = coordinate;
-  fsglyphInit.selector = selector;
+  init.data = data;
+  init.treemapCoordinates = coordinate;
+  init.selector = selector;
 
 
-  var svgCanvas = fsglyphInit.getCanvas();
+  var svgCanvas = init.getCanvas();
 
 
   // Delete if there to redraw new result
 
-  if (fsglyphInit.glyphCanvas) {
+  if (init.glyphCanvas) {
     console.log("New search result came so delete the last appended group from the canvas!");
-    fsglyphInit.glyphCanvas.remove();
+    init.glyphCanvas.remove();
   }
 
   console.log("Appended group to the canvas!");
 
-  fsglyphInit.glyphCanvas = svgCanvas.append("g");
+  init.glyphCanvas = svgCanvas.append("g");
 
   // update or concatenate result
-  fsglyphInit.setResultArray(fsglyphInit.data);
-  drawFSGlyph(fsglyphInit.data);
+  init.setResultArray(init.data);
+  drawFSGlyph(init.data);
 }
 
 /*********************************************************************************************************************
@@ -95,12 +103,34 @@ function drawFSGlyph(data) {
 
   console.log("drawGlyph");
 
-  var glyphCanvas = fsglyphInit.glyphCanvas;
-  var glyphSize = fsglyphInit.glyphSize;
-  var dotSize = fsglyphInit.dotSize;
-  var dateRingSize = fsglyphInit.dateRingSize;
-  var dateRingWidth = fsglyphInit.dateRingWidth;
-  var spiralSize = fsglyphInit.spiralSize;
+  var glyphCanvas = init.glyphCanvas;
+
+  if (data.length < 100) { // large glyph
+    var GLYPH_SIZE = init.GLYPH_SIZE_L;
+    var DOT_SIZE = init.DOT_SIZE_L;
+    var DATE_RING_SIZE = init.DATE_RING_SIZE_L;
+    var DATE_RING_WIDTH = init.DATE_RING_WIDTH_L;
+    var SPIRAL_SIZE = init.SPIRAL_SIZE_L;
+    var PI_SIZE = init.PI_SIZE_L;
+  } else {
+    var GLYPH_SIZE = init.GLYPH_SIZE;
+    var DOT_SIZE = init.DOT_SIZE;
+    var DATE_RING_SIZE = init.DATE_RING_SIZE;
+    var DATE_RING_WIDTH = init.DATE_RING_WIDTH;
+    var SPIRAL_SIZE = init.SPIRAL_SIZE;
+    var PI_SIZE = init.PI_SIZE;
+  }
+
+
+  var tooltip = d3.tip()
+    .attr('class', 'd3-tip')
+    //.offset([0, 0])
+    .html(function (d, i) {
+      return d;
+
+    });
+  glyphCanvas.call(tooltip);
+
 
   /*
    * Draw glyph for each data point (document).
@@ -121,7 +151,7 @@ function drawFSGlyph(data) {
 
     svg.append("path")
       .attr("d", ageArc(data[i].age))
-      .style("fill", "cyan");
+      .style("fill", "#198cff");
 
     // draw spiral separately in a function
     spiral(svg, data[i].date);
@@ -130,16 +160,20 @@ function drawFSGlyph(data) {
       .attr("d", dot())
       .style("fill", function () {
         return colorDot[data[i].type];
-      });
+      })
 
     svg.append("title")
-      .text("Name: " + data[i].name + ", Type: " + data[i].type + ", Size: " + data[i].size + ", Date: " + data[i].date);
+      .text("Name: " + data[i].name + ", Type: " + data[i].type + ", Size: " + data[i].size + ", Date: " + data[i].date)
+      .style("font-size", "12px");
+
+    //svg.on('mouseover', tooltip.show)
+    //.on('mouseout', tooltip.hide);
   }
 
   function outerRing() {
     var ring = d3.svg.arc()
-      .innerRadius(glyphSize * 0.5 - 1)
-      .outerRadius(glyphSize * 0.5)
+      .innerRadius(GLYPH_SIZE * 0.5 - 1)
+      .outerRadius(GLYPH_SIZE * 0.5)
       .startAngle(0)
       .endAngle(2 * Math.PI);
     return ring;
@@ -147,8 +181,8 @@ function drawFSGlyph(data) {
 
   function dateRing() {
     var dateRing = d3.svg.arc()
-      .innerRadius(dateRingSize * 0.5 - dateRingWidth)
-      .outerRadius(dateRingSize * 0.5)
+      .innerRadius(DATE_RING_SIZE * 0.5 - DATE_RING_WIDTH)
+      .outerRadius(DATE_RING_SIZE * 0.5)
       .startAngle(0)
       .endAngle(2 * Math.PI);
     return dateRing;
@@ -157,7 +191,7 @@ function drawFSGlyph(data) {
   function dot() {
     var dot = d3.svg.arc()
       .innerRadius(0)
-      .outerRadius(dotSize)
+      .outerRadius(DOT_SIZE)
       .startAngle(0)
       .endAngle(2 * Math.PI);
     return dot;
@@ -170,8 +204,8 @@ function drawFSGlyph(data) {
     var token = size.split(" ");
 
     var radiusScale = d3.scale.linear()
-      .domain([0, 1024])
-      .range([0, glyphSize * 0.5]);
+      .domain([1, 1024])
+      .range([PI_SIZE/3, PI_SIZE]);
 
     var coordinateScale = d3.scale.ordinal()
       .domain(["B", "KB", "MB", "GB"])
@@ -179,7 +213,7 @@ function drawFSGlyph(data) {
 
     var radius = radiusScale(parseInt(token[0]));
     var startAngle = coordinateScale(token[1]);
-    var endAngle = startAngle + (0.4 * Math.PI) ;
+    var endAngle = startAngle + (0.4 * Math.PI);
 
     var pie = d3.svg.arc()
       .innerRadius(0)
@@ -216,14 +250,14 @@ function drawFSGlyph(data) {
       .domain([1, 3])       // 3 decade is considered
       .range([0, 0.5 * Math.PI]);
 
-     //console.log("date: ", date);
+    //console.log("date: ", date);
 
     var startAngle = coordinateScale(token[1]);
 
     var angle;
     if (token[1] == "D") {
       angle = dayScale(token[0]);
-    }  else if(token[1] == "M") {
+    } else if (token[1] == "M") {
       angle = monthScale(token[0]);
     } else if (token[1] == "Y") {
       angle = yearScale(token[0]);
@@ -237,8 +271,8 @@ function drawFSGlyph(data) {
     var endAngle = startAngle + angle;
 
     var arc = d3.svg.arc()
-      .innerRadius(dateRingSize * 0.5 - dateRingWidth)
-      .outerRadius(dateRingSize * 0.5)
+      .innerRadius(DATE_RING_SIZE * 0.5 - DATE_RING_WIDTH)
+      .outerRadius(DATE_RING_SIZE * 0.5)
       .startAngle(startAngle)
       .endAngle(endAngle);
     return arc;
@@ -264,8 +298,8 @@ function drawFSGlyph(data) {
 
 
     var start = 0,
-        end = 1,
-        r_max = spiralSize * 0.5;
+      end = 1,
+      r_max = SPIRAL_SIZE * 0.5;
     r_min = r_max - 6;
 
 

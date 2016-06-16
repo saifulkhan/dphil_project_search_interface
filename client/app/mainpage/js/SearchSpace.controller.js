@@ -18,7 +18,7 @@ enterpriseSearchApp.controller('searchspaceController', ["$modal", "$scope", "$h
       h: $window.innerHeight - 20
     };
 
-    $scope.treemapBuildData = [];
+    $scope.treemapData = [];
 
     // Setting attributes for fsglyphs & treemap
     $scope.settingAttributes = {
@@ -48,7 +48,7 @@ enterpriseSearchApp.controller('searchspaceController', ["$modal", "$scope", "$h
 
     $scope.$on('$viewContentLoaded', function () {
       //alert("Page loaded:");
-      $scope.treemapBuild();
+      $scope.buildTreemap();
     });
 
 
@@ -57,16 +57,40 @@ enterpriseSearchApp.controller('searchspaceController', ["$modal", "$scope", "$h
      * Send: Co-ordinates
      * Receive Json data and then draw treemap
      ****************************************************************************************************************/
-    $scope.treemapBuild = function () {
-      $http.post('/api/common/treemapbuild', $scope.treemapCoordinates).success(function (response) {
+    $scope.buildTreemap = function () {
+      $http.post('/api/common/buildtreemap', $scope.treemapCoordinates).success(function (response) {
 
         //response received from server
         if (response.length > 0) {
-          $scope.treemapBuildData = response;
-          $rootScope.$broadcast('event:treemapbuild-received', $scope.treemapBuildData);
+          $scope.treemapData = response;
+          $rootScope.$broadcast('event:treemapbuild-received', $scope.treemapData);
         }
       })
     }
+
+
+    /***************************************************************************************************************
+     * Zoom : http request to server
+     * Send: the path to zoom, previous co-ordinate will be there
+     * Receive Json data and then draw treemap
+     ****************************************************************************************************************/
+
+    $rootScope.zoomTreemap = function (pathArg) {
+
+      var path = {path: pathArg};
+      console.log("called zoomTreemap():: path=", path);
+
+      $http.post('/api/common/zoomtreemap', path).success(function (response) {
+        //response received from server
+        if (response.length > 0) {
+          $scope.treemapData = response;
+          $rootScope.$broadcast('event:treemapbuild-received', $scope.treemapData);
+
+
+        }
+      })
+    }
+
 
 
     /*******************************************************************************************************************

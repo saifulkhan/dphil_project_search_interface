@@ -118,25 +118,25 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
   $scope.searchresult = [];
 
 
-  /***************************************************************************************************************
+  /************************************************************************************************
    * When the page loads first time.
    * Treemap
-   ****************************************************************************************************************/
+   ************************************************************************************************/
 
   $scope.$on('$viewContentLoaded', function () {
 
-    $scope.provis_window = $window.open("/searchspace", "Search Space: Treemap & Glyph", "height=850,width=1500");
+    $scope.provis_window =
+      $window.open("/searchspace", "Search Space: Treemap & Glyph", "height=850, width=1500");
   });
 
 
-  /***************************************************************************************************************
+  /************************************************************************************************
    * This function is invoked on page unloading.
    * It is used to close the child window, searchspace before unloading.
    ****************************************************************************************************************/
 
   $window.onunload = function (event) {
     $scope.provis_window.close();
-
     return 'Thank you';
   }
 
@@ -161,13 +161,9 @@ enterpriseSearchApp.controller('mainpageController', function ($scope, $rootScop
   }
 
 
-
-
   /***************************************************************************************************************
    * searchspace page page related
    ****************************************************************************************************************/
-
-
   $scope.searchspacePage = function () {
     $window.open("/searchspace", "_blank");
   }

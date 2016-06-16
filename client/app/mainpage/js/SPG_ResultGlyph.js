@@ -59,7 +59,7 @@ var resultGlyph = {
         .attr("height", this.svgCoordinate.h)
         .attr("width", this.svgCoordinate.w)
         .style("background", "none");
-        //.attr("transform", function(d) { return "translate(" + 0 + "," - this.svgCoordinate.h  + ")"; });
+      //.attr("transform", function(d) { return "translate(" + 0 + "," - this.svgCoordinate.h  + ")"; });
 
     }
     return this.svgCanvas;
@@ -216,7 +216,8 @@ function processResult(data, selector, svgCoordinate) {
   var total = visualiseData.length;
   resultGlyph.statData[0] = {
     "unselect": (added.length - selectInAdded) / total,
-    "select": selectInAdded / total};
+    "select": selectInAdded / total
+  };
 
   resultGlyph.statData[1] = {
     "unselect": (common.length - selectInCommon) / total,
@@ -251,9 +252,9 @@ function drawResultGraph(dataset) {
   var coordinate = {};
   var lastCoordinate = resultGlyph.getLastNodeCoordinate();
   if (Object.getOwnPropertyNames(lastCoordinate).length === 0) {
-    coordinate["x"] =  resultGlyph.distanceX * 0.5;
+    coordinate["x"] = resultGlyph.distanceX * 0.5;
     // TODO: position hardcoded for laptop = 15
-    coordinate["y"] =  resultGlyph.distanceX * 0.5;
+    coordinate["y"] = resultGlyph.distanceX * 0.5;
   } else {
     coordinate["x"] = lastCoordinate["x"] + resultGlyph.glyphSize + resultGlyph.distanceX;
     coordinate["y"] = lastCoordinate["y"];
@@ -277,8 +278,8 @@ function drawResultGraph(dataset) {
   svg.append("rect")
     .attr("width", glyphSize + resultGlyph.gridDistance * 2)
     .attr("height", glyphSize + resultGlyph.gridDistance * 2)
-    .attr("x", - resultGlyph.gridDistance)
-    .attr("y", - resultGlyph.gridDistance)
+    .attr("x", -resultGlyph.gridDistance)
+    .attr("y", -resultGlyph.gridDistance)
     .style("fill", "none")
     .style("stroke", "#DDDAD6")
     .style("stroke-width", ".5px");
@@ -302,7 +303,7 @@ function drawResultGraph(dataset) {
         return y + resultGlyph.gridDistance;
       })
       .style("fill", function (d, i) {
-          return gridColor(d["flag"]);
+        return gridColor(d["flag"]);
       });
 
 
@@ -331,10 +332,10 @@ function drawResultGraph(dataset) {
     svg.selectAll("fp")
       .data(dataset).enter()
       .append("rect")
-      .attr("width", function(d) {
+      .attr("width", function (d) {
         return fpGridSize(d.fp);
       })
-      .attr("height", function(d) {
+      .attr("height", function (d) {
         return fpGridSize(d.fp);
       })
       .attr("x", function (d, i) {
@@ -441,7 +442,7 @@ function drawResultGraph(dataset) {
       })
       .style("font-size", resultGlyph.fontSize + "px")
       .style("font-family", "Verdana")
-      .style("fill", function(d) {
+      .style("fill", function (d) {
         var offset = 25;
         var barWidth = glyphSize * (d["unselect"] + d["select"]);
         if (barWidth + offset > glyphSize * 0.5) {
