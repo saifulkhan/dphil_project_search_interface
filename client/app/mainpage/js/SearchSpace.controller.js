@@ -10,12 +10,14 @@ var enterpriseSearchApp = angular.module('enterpriseSearchApp');
 enterpriseSearchApp.controller('searchspaceController', ["$modal", "$scope", "$http", "$window", "$rootScope",
   function ($modal, $scope, $http, $window, $rootScope) {
 
+    var width = $window.innerWidth - 60;
+    var height = $window.innerHeight - 60;
 
     $rootScope.treemapCoordinates = {
-      x: 0,
-      y: 0,
-      w: $window.innerWidth - 20,
-      h: $window.innerHeight - 20
+      x: 30,
+      y: 30,
+      w: width,
+      h: height,
     };
 
     $scope.treemapData = [];

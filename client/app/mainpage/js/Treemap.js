@@ -24,10 +24,11 @@ var treemapInit = {
     if (this.svgCanvas == null) {
       this.svgCanvas = d3.select(this.selector)
         .append("svg")
-        .attr("height", this.treemapCoordinates.h)
-        .attr("width", this.treemapCoordinates.w)
-        .attr("x", +20)
-        .attr("y", +20);
+        .attr("height", this.treemapCoordinates.h + 60)
+        .attr("width", this.treemapCoordinates.w + 60)
+      //.attr("x", 60)
+      //.attr("y", 60)
+      //.attr("transform", "translate(120, 120)");
       //.style("background", "blue");
     }
     return this.svgCanvas;
@@ -99,11 +100,11 @@ function drawTreemap(data) {
   var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
-    .html(function(d) {
+    .html(function (d) {
       if (d.type == "") { // directory
-        return "<strong  style='color:red'>Location:</strong> <span>" + d.path + "/" + d.name + "</span>";
+        return "<strong  style='color:#ff0097'>Location:</strong> <span>" + d.path + "/" + d.name + "</span>";
       }
-    })
+    });
 
   treemapCanvas.call(tip);
 
@@ -135,18 +136,28 @@ function drawTreemap(data) {
       }
     })
     .style("stroke", function (d) {
-      if(d.depth - 1 >= 0) {
+      if (d.depth - 1 >= 0) {
         return dirColor[d.depth - 1];
       } else {
         return dirColor[d.depth];
       }
     })
     .style("stroke-width", "0.2")
-    .on('mouseover', tip.show)
-    .on('mouseout', tip.hide)
+    .on('mouseover', function (d, i) {
+
+      d3.select(this).transition().duration(300)
+        .style({'stroke-opacity': 1, 'stroke': '#ff0097', 'stroke-width' : '2'});
+      return tip.show(d);
+    })
+    .on('mouseout', function (d, i) {
+
+      d3.select(this).transition().duration(300)
+        .style({'stroke-opacity': 0.4, 'stroke': '#eee'});
+      return tip.hide(d);
+    })
     .on('click', function (d) {
       if (d.type == "") { // directory
-        treemapInit.zoomTreemap(d.path+"/"+d.name);
+        treemapInit.zoomTreemap(d.path + "/" + d.name);
       }
     });
 
@@ -171,8 +182,7 @@ function drawTreemap(data) {
       // check if it is big or small, then modify it
       return (this.getBBox().width < d.w) && (this.getBBox().height < d.h) ? d.name : " "; //TODO
     })
-    .style("fill", textColor);
-
+    .style("fill", treemapInit.textColor);
 
 
 }
