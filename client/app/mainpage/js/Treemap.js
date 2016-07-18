@@ -91,23 +91,46 @@ function drawTreemap(data) {
   var treemapCanvas = treemapInit.treemapBuildCanvas;
   var maxDepth = treemapInit.maxDepth;
 
-  var dirColor = ["#006d2c", "#2ca25f", "#66c2a4", "#b2e2e2"];
-  // ["#005824", "#238b45", "#41ae76", "#66c2a4", "#99d8c9", "#ccece6"]; // maxDepth
-  var fileColor = ["#9e9ac8", "#807dba", "#6a51a3", "#54278f"];
-  // ["#3f007d", "#54278f", "#6a51a3", "#807dba", "#9e9ac8", "#bcbddc"];
 
+  //var dirColor = ["#005824", "#238b45", "#41ae76", "#66c2a4", "#99d8c9", "#ccece6"]; // maxDepth
+  //var fileColor = ["#9e9ac8", "#807dba", "#6a51a3", "#54278f"];
+
+  var MAX_DEPTH = 3;
+
+  var sat = d3.scale.linear()
+    .domain([0, MAX_DEPTH])
+    .range([0.2, 1.0]);
+
+  var dir_color = function (depth) {
+    //console.log("depth:", depth, ", sat:", sat(depth));
+    var color = d3.hsl(158, sat(depth), 0.25).toString();  // 120 degree ~ green  // .4, .5
+    return color;
+  }
+
+  var file_color = d3.hsl(291, .51, 0.25).toString(); // dark purple
+
+  var sat1 = d3.scale.linear()
+    .domain([0, MAX_DEPTH])
+    .range([0.3, 1]);
+
+  var dir_label_color = function (depth) {
+    var color = d3.hsl(300, sat1(depth), 0.5).toString(); // 0 degree ~ 0
+    return color;
+  }
 
   var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function (d) {
-      if (d.type == "") { // directory
+      if (d.type == "") {
+        // directory
         return "<strong  style='color:#ff0097'>Location:</strong> <span>" + d.path + "/" + d.name + "</span>";
       }
     });
 
   treemapCanvas.call(tip);
 
+  var RECT_STROKE_WIDTH = 0.2;
   treemapCanvas.selectAll("rect")
     .data(data).enter()
     .append("rect")
@@ -125,34 +148,51 @@ function drawTreemap(data) {
     })
     .attr("name", function (d) {
       return d.name;
-    })  // dbg
+    })
     .style("fill", function (d) {
       if (d.type) {
         //file
-        return d.depth > maxDepth ? fileColor[maxDepth] : fileColor[d.depth];
+        return file_color;
       } else {
         // directory
-        return d.depth > maxDepth ? dirColor[maxDepth] : dirColor[d.depth];
+        return dir_color(d.depth);
       }
     })
     .style("stroke", function (d) {
-      if (d.depth - 1 >= 0) {
-        return dirColor[d.depth - 1];
+      var color;
+      if (d.depth > 0) {
+        color = dir_color(d.depth - 1);
       } else {
-        return dirColor[d.depth];
+        color = dir_color(d.depth);
       }
+      return "white";
     })
-    .style("stroke-width", "0.2")
+    .style("stroke-width", RECT_STROKE_WIDTH)
     .on('mouseover', function (d, i) {
-
       d3.select(this).transition().duration(300)
-        .style({'stroke-opacity': 1, 'stroke': '#ff0097', 'stroke-width' : '2'});
+        .style({
+          //'stroke-opacity': 1,
+          'stroke': 'white',
+          'stroke-width': '2'
+        });
       return tip.show(d);
     })
     .on('mouseout', function (d, i) {
-
       d3.select(this).transition().duration(300)
-        .style({'stroke-opacity': 0.4, 'stroke': '#eee'});
+        .style({
+          'stroke-width': RECT_STROKE_WIDTH,
+          //'stroke-opacity': 0,
+          'stroke': function (d) {
+            var color;
+            if (d.depth > 0) {
+              color = dir_color(d.depth - 1);
+            } else {
+              color = dir_color(d.depth);
+            }
+            return "white";
+          }
+        });
+
       return tip.hide(d);
     })
     .on('click', function (d) {
@@ -182,7 +222,10 @@ function drawTreemap(data) {
       // check if it is big or small, then modify it
       return (this.getBBox().width < d.w) && (this.getBBox().height < d.h) ? d.name : " "; //TODO
     })
-    .style("fill", treemapInit.textColor);
+    .style("fill", function(d, i) {
+      //return dir_label_color(d.depth);
+      return "white";
+    });
 
 
 }

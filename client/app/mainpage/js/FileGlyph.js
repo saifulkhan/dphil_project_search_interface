@@ -141,8 +141,8 @@ function drawFSGlyph(data) {
       .attr("transform", "translate(" + data[i].x + ", " + data[i].y + ")");
 
     svg.append("path")
-      .attr("d", dateRing())
-      .style("fill", "Silver")
+      .attr("d", datePlue())
+      .style("fill", "silver")
       .style("opacity", 0.6);
 
     svg.append("path")
@@ -151,7 +151,7 @@ function drawFSGlyph(data) {
 
     svg.append("path")
       .attr("d", ageArc(data[i].age))
-      .style("fill", "#198cff");
+      .style("fill", "cyan");
 
     // draw spiral separately in a function
     spiral(svg, data[i].date);
@@ -179,7 +179,7 @@ function drawFSGlyph(data) {
     return ring;
   }
 
-  function dateRing() {
+  function datePlue() {
     var dateRing = d3.svg.arc()
       .innerRadius(DATE_RING_SIZE * 0.5 - DATE_RING_WIDTH)
       .outerRadius(DATE_RING_SIZE * 0.5)
@@ -371,11 +371,11 @@ function drawFSGlyph(data) {
  */
 
 var colorDot = {
-  "Document": "Black",
+  "Document": "Cyan",
   "Spreadsheet": "Blue",
   "Presentation": "Brown",
   "Audio": "Crimson",
-  "Video": "Cyan",
+  "Video": "White",
   "Image": "DarkBlue",
   "Database": "HotPink",
   "Executable": "Red",
