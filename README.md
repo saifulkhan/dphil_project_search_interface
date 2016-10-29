@@ -11,22 +11,24 @@ Search interface support two mazor functionalities (a) search result and search 
  
 # Prerequisites : Web-tools
 
-Nodejs version:
-MongoDB version:
+node version: v0.10.33
+npm version: 1.4.28
 
-# Dependencies : Search Engine Backend
+- `$ wget  https://nodejs.org/dist/v0.10.33/node-v0.10.33-linux-x64.tar.gz`
+- `$ tar -xvf node-v0.10.33-linux-x64.tar.gz`
+- `$ sudo cp -rf node-v0.10.33-linux-x64/* /usr/local/`
 
 
-# Install and Development
+# Dependencies : Search Engine Back-end 
+
+
+# Run
 
 To install this project in your local machine and begin developping, you need to follow these steps:
-- `sudo apt-get install nodejs`
-- `sudo npm install -g grunt-cli bower forever`
-- clone https://github.com/saifulkhan/Search-Interface.git
--`cd search-interface`
+
 - `sudo npm install`
 - `bower install`
-- Run this project in development mode: `grunt serve`
+- `grunt serve` <-- run this project in development mode 
 
 
 ## Testing
@@ -34,7 +36,6 @@ To install this project in your local machine and begin developping, you need to
 Running `grunt test` will run the client and server unit tests with karma and mocha.
 Use `grunt test:server` to only run server tests.
 Use `grunt test:client` to only run client tests.
-
-**Protractor tests**
+ 
 
  
