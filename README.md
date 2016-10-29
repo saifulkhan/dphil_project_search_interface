@@ -33,7 +33,6 @@ To install this project in your local machine and begin developping, you need to
 
 ## Testing
 
-- `grunt test`  <-- will run the client and server unit tests with karma and mocha.
 - `grunt test:server` <-- to only run server tests.
 - `grunt test:client` <-- to only run client tests.
  
