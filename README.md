@@ -1,16 +1,23 @@
-# Search-Interface
 
-The search (user) interface and visualization of search-related information
+# About 
+This is a research prototype of (a) an Enterprise Search Engine (C++) and (b) a Search Interface (Qt and Angular, d3). 
 
-  AngularJS powered HTML5 Web application. It uses the MEAN stack (MongoDB will be used in future, Express as the web framework, 
-  AngularJS as the frontend framework, and Node.js as the server platform)
+This repository contains the  Search Interface (front-end code).
+Entire version of the prototype (part of my DPhil) is not open sourced. This code contains minimal comments and test cases.
+The [Enterprise Search Engine](https://github.com/saifulkhan/Enterprise-Search-Engine) can be found in an another repository. 
 
-### Prerequisites
+Search interface support two mazor functionalities (a) search result and search space visualization for rapid interpretation of search results and (b) search collaboration. 
+
+ 
+# Prerequisites : Web-tools
 
 Nodejs version:
 MongoDB version:
 
-### Install and Development
+# Dependencies : Search Engine Backend
+
+
+# Install and Development
 
 To install this project in your local machine and begin developping, you need to follow these steps:
 - `sudo apt-get install nodejs`
@@ -22,10 +29,12 @@ To install this project in your local machine and begin developping, you need to
 - Run this project in development mode: `grunt serve`
 
 
-### Testing
+## Testing
 
 Running `grunt test` will run the client and server unit tests with karma and mocha.
 Use `grunt test:server` to only run server tests.
 Use `grunt test:client` to only run client tests.
 
 **Protractor tests**
+
+ 
