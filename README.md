@@ -38,9 +38,11 @@ To install this project in your local machine and begin developping, you need to
 
 
 # Screenshots
-An example screenshoot of the user interface -
+An example screenshoot of the user interface. Window 1 -
 ![alt tag](window-1-web.png)
-![alt tag](window-2.png.png)
+
+Window 2 -
+![alt tag](window-2.png)
 
 
 # Publications
