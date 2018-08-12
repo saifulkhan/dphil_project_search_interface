@@ -1,12 +1,13 @@
 
 # About 
-This is a research prototype of (a) an Enterprise Search Engine (C++) and (b) a Search Interface (Qt and Angular, d3). 
+This is a research prototype of (a) an Enterprise Search Engine (C++) and (b) a Search Interface (Angular, d3). 
 
-This repository contains the  Search Interface (front-end code).
-Entire version of the prototype (part of my DPhil) is not open sourced. This code contains minimal comments and test cases.
-The [Enterprise Search Engine](https://github.com/saifulkhan/Enterprise-Search-Engine) can be found in an another repository. 
+This repository contains the front-end or search UI.
+The backend or search index in in [this repository](https://github.com/saifulkhan/dphil_project_search_index).
 
 Search interface support two mazor functionalities (a) search result and search space visualization for rapid interpretation of search results and (b) search collaboration. 
+
+Entire version of the prototype (part of my DPhil) is not open sourced. This code contains minimal comments and test cases.
 
  
 # Prerequisites
@@ -18,7 +19,8 @@ npm version: 1.4.28
 - `$ sudo cp -rf node-v0.10.33-linux-x64/* /usr/local/`
 
 
-# Dependencies : Search Engine Back-end 
+# Dependencies : Search Index backend 
+The backend or search index in in [this repository](https://github.com/saifulkhan/dphil_project_search_index).
 
 
 # Run
