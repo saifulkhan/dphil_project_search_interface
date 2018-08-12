@@ -42,9 +42,9 @@ To install this project in your local machine and begin developping, you need to
 # Screenshots
 An example screenshoot of the user interface.
 
-![Screen-1](./window-1-web.jpg)
+![Screen-1](./window-1-web.png)
 
-![Screen-2](./window-2.jpg)
+![Screen-2](./window-2.png)
 
 
 # Publications
